@@ -270,10 +270,6 @@ ai-readiness/
 - Frontend: Change port in `vite.config.ts`
 - Backend: Change PORT in `.env` file
 
-## License
-
-MIT License - feel free to use this project for commercial and non-commercial purposes.
-
 ## Support
 
 For questions, issues, or feature requests:
