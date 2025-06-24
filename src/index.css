@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-gray-900 text-white;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium py-2 px-4 rounded-lg transition-all duration-200 border border-gray-600;
+  }
+
+  .card {
+    @apply bg-gray-800 rounded-xl shadow-lg border border-gray-700 backdrop-blur-sm;
+  }
+
+  .card-dark {
+    @apply bg-gray-850 rounded-xl shadow-lg border border-gray-700/50 backdrop-blur-sm;
+  }
+
+  .input-field {
+    @apply w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200;
+  }
+
+  .metric-card {
+    @apply bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border-gray-700/50 p-6 transition-all duration-200 hover:shadow-xl hover:border-gray-600;
+  }
+
+  .sidebar-nav {
+    @apply bg-gray-800/95 backdrop-blur-sm border-r border-gray-700;
+  }
+
+  .nav-item {
+    @apply flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 text-gray-300 hover:text-white hover:bg-gray-700/50;
+  }
+
+  .nav-item-active {
+    @apply flex items-center space-x-3 px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600/20 to-blue-500/10 border border-blue-500/30 text-blue-300;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent;
+  }
+
+  .status-positive {
+    @apply text-green-400;
+  }
+
+  .status-negative {
+    @apply text-red-400;
+  }
+
+  .glass-effect {
+    @apply bg-gray-800/80 backdrop-blur-sm border border-gray-700/50;
+  }
+}
