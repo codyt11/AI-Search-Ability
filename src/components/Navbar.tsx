@@ -9,6 +9,8 @@ import {
   X,
   TrendingUp,
   AlertTriangle,
+  Play,
+  Database,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
@@ -34,11 +36,11 @@ const Navbar = () => {
 
   const navItems = [
     { path: "/", label: "Home", icon: Brain },
-    { path: "/analyze", label: "Analyze", icon: FileText },
+    { path: "/content-assets", label: "Content & Assets", icon: Database },
     { path: "/analytics", label: "Analytics", icon: BarChart3 },
     { path: "/prompt-trends", label: "Prompt Trends", icon: TrendingUp },
     { path: "/content-gaps", label: "Content Gaps", icon: AlertTriangle },
-    { path: "/settings", label: "Settings", icon: Settings },
+    { path: "/prompt-simulator", label: "Prompt Simulator", icon: Play },
   ];
 
   const timeRanges = [
@@ -125,7 +127,7 @@ const Navbar = () => {
               <Brain className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold text-gradient">
-              AI Readiness
+              Search-Ready AI Analyzer
             </span>
           </div>
 
@@ -152,7 +154,7 @@ const Navbar = () => {
               <select
                 value={timeRange}
                 onChange={(e) => setTimeRange(e.target.value)}
-                className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer"
+                className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg px-2 py-2 pr-6 focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer w-32"
               >
                 {timeRanges.map((range) => (
                   <option key={range} value={range}>
@@ -167,7 +169,7 @@ const Navbar = () => {
               <select
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
-                className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer"
+                className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg px-2 py-2 pr-6 focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer w-28"
               >
                 {regions.map((reg) => (
                   <option key={reg} value={reg}>
@@ -177,11 +179,24 @@ const Navbar = () => {
               </select>
             </div>
 
+            {/* Settings Icon */}
+            <Link
+              to="/settings"
+              className={`p-2 rounded-lg transition-colors ${
+                location.pathname === "/settings"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-400 hover:text-white hover:bg-gray-800"
+              }`}
+              title="Settings"
+            >
+              <Settings className="h-5 w-5" />
+            </Link>
+
             {/* Filter Button with Dropdown */}
             <div className="relative" ref={filterRef}>
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="btn-secondary flex items-center space-x-2 relative"
+                className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg px-2 py-2 hover:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors flex items-center space-x-1 relative"
               >
                 <Filter className="h-4 w-4" />
                 <span>Filter</span>

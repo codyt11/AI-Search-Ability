@@ -22,6 +22,8 @@ import {
   ArrowDown,
   Download,
   RefreshCw,
+  Construction,
+  AlertTriangle,
 } from "lucide-react";
 
 const PromptTrends = () => {
@@ -146,6 +148,32 @@ const PromptTrends = () => {
 
   return (
     <div className="space-y-8 animate-fade-in">
+      {/* Under Construction Banner */}
+      <div className="bg-gradient-to-r from-yellow-900/50 to-orange-900/50 border border-yellow-500/50 rounded-lg p-6">
+        <div className="flex items-center justify-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <Construction className="h-8 w-8 text-yellow-400 animate-pulse" />
+            <AlertTriangle className="h-6 w-6 text-orange-400" />
+          </div>
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-yellow-300 mb-2">
+              🚧 Under Construction 🚧
+            </h2>
+            <p className="text-yellow-200 text-lg">
+              Prompt Trend Analytics is currently being developed
+            </p>
+            <p className="text-yellow-300 text-sm mt-2">
+              This feature will provide real-time insights into prompt patterns,
+              trending topics, and content performance metrics
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <AlertTriangle className="h-6 w-6 text-orange-400" />
+            <Construction className="h-8 w-8 text-yellow-400 animate-pulse" />
+          </div>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

@@ -2,6 +2,16 @@ import axios from "axios";
 
 const API_BASE_URL = "/api";
 
+export interface QuickSummary {
+  filename: string;
+  fileType: string;
+  fileSize: string;
+  wordCount: number;
+  tokenCount: number;
+  estimatedChunks: number;
+  uploadedAt: string;
+}
+
 export interface AnalysisResult {
   overallScore: number;
   structureScore: number;
@@ -58,6 +68,27 @@ export interface AnalyticsData {
     priority: string;
   }>;
 }
+
+export const getQuickSummary = async (file: File): Promise<QuickSummary> => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/quick-summary`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Quick summary API error:", error);
+    throw new Error("Failed to get file summary");
+  }
+};
 
 export const analyzeAsset = async (file: File): Promise<AnalysisResult> => {
   const formData = new FormData();

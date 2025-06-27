@@ -48,7 +48,7 @@ const Settings = () => {
       <div>
         <h1 className="text-3xl font-bold text-white">Settings</h1>
         <p className="text-gray-400 mt-2">
-          Configure your AI Readiness Analyzer preferences and API settings
+          Configure your Search-Ready AI Analyzer preferences and API settings
         </p>
       </div>
 

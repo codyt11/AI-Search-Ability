@@ -10,30 +10,49 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import FileUpload from "../components/FileUpload";
+import UploadConfirmation from "../components/UploadConfirmation";
 import AnalysisResults from "../components/AnalysisResults";
-import { analyzeAsset, AnalysisResult } from "../services/api";
+import ActionableInsights from "../components/ActionableInsights";
+import {
+  analyzeAsset,
+  getQuickSummary,
+  AnalysisResult,
+  QuickSummary,
+} from "../services/api";
 
 const Analyzer = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isGettingSummary, setIsGettingSummary] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
     null
   );
+  const [quickSummary, setQuickSummary] = useState<QuickSummary | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleFileUpload = useCallback(async (file: File) => {
     setSelectedFile(file);
-    setIsAnalyzing(true);
+    setIsGettingSummary(true);
     setAnalysisResult(null);
+    setQuickSummary(null);
 
     try {
+      // First get quick summary
+      const summary = await getQuickSummary(file);
+      setQuickSummary(summary);
+      setIsGettingSummary(false);
+
+      // Show scanning indicator and start full analysis
+      setIsAnalyzing(true);
       const result = await analyzeAsset(file);
       setAnalysisResult(result);
       toast.success("Analysis completed successfully!");
     } catch (error) {
       toast.error("Analysis failed. Please try again.");
       console.error("Analysis error:", error);
+      setQuickSummary(null);
     } finally {
       setIsAnalyzing(false);
+      setIsGettingSummary(false);
     }
   }, []);
 
@@ -106,11 +125,11 @@ const Analyzer = () => {
         </h2>
         <FileUpload
           onFileUpload={handleFileUpload}
-          isAnalyzing={isAnalyzing}
-          disabled={isAnalyzing}
+          isAnalyzing={isGettingSummary || isAnalyzing}
+          disabled={isGettingSummary || isAnalyzing}
         />
 
-        {selectedFile && (
+        {selectedFile && !quickSummary && !isGettingSummary && (
           <div className="mt-6 p-4 bg-blue-900/20 border border-blue-700/50 rounded-lg">
             <div className="flex items-center space-x-3">
               <div className="p-2 rounded-lg bg-blue-600/20">
@@ -127,8 +146,21 @@ const Analyzer = () => {
         )}
       </div>
 
+      {/* Upload Confirmation with Quick Summary */}
+      {quickSummary && (
+        <UploadConfirmation summary={quickSummary} isScanning={isAnalyzing} />
+      )}
+
       {/* Analysis Results */}
       {analysisResult && <AnalysisResults result={analysisResult} />}
+
+      {/* Actionable Insights - shown after analysis is complete */}
+      {analysisResult && (
+        <ActionableInsights
+          fileName={selectedFile?.name || "your document"}
+          analysisResult={analysisResult}
+        />
+      )}
 
       {/* Analysis Features Info */}
       <div className="card p-6">
