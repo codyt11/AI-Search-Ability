@@ -1,7 +1,7 @@
 {
   "name": "ai-readiness-server",
   "version": "1.0.0",
-  "description": "Backend API for AI Readiness Analyzer",
+  "description": "Backend API for Search-Ready AI Analyzer",
   "type": "module",
   "main": "index.js",
   "scripts": {

@@ -14,6 +14,83 @@ const router = express.Router();
 // Store for analysis results (in production, use a database)
 const analysisResults = new Map();
 
+router.post("/quick-summary", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const file = req.file;
+    console.log(
+      `Quick summary for file: ${file.originalname} (${file.mimetype})`
+    );
+
+    // Extract text content based on file type
+    let textContent = "";
+    try {
+      textContent = await analyzeDocument(file.path, file.mimetype);
+    } catch (error) {
+      console.error("Document analysis error:", error);
+      return res
+        .status(400)
+        .json({ error: "Failed to extract content from file" });
+    }
+
+    if (!textContent || textContent.trim().length === 0) {
+      return res
+        .status(400)
+        .json({ error: "No readable content found in file" });
+    }
+
+    // Quick analysis for immediate feedback
+    const tokenAnalysis = await analyzeTokens(textContent);
+    const wordCount = textContent
+      .split(/\s+/)
+      .filter((word) => word.trim()).length;
+
+    // Estimate content chunks (assuming ~1000 tokens per chunk for AI retrieval)
+    const estimatedChunks = Math.ceil(tokenAnalysis.totalTokens / 1000);
+
+    const quickSummary = {
+      filename: file.originalname,
+      fileType: getFileTypeDisplay(file.mimetype),
+      fileSize: formatFileSize(file.size),
+      wordCount,
+      tokenCount: tokenAnalysis.totalTokens,
+      estimatedChunks,
+      uploadedAt: new Date().toISOString(),
+    };
+
+    // Clean up uploaded file
+    try {
+      await fs.unlink(file.path);
+    } catch (cleanupError) {
+      console.error("Failed to clean up uploaded file:", cleanupError);
+    }
+
+    res.json(quickSummary);
+  } catch (error) {
+    console.error("Quick summary error:", error);
+
+    // Clean up file if it exists
+    if (req.file) {
+      try {
+        await fs.unlink(req.file.path);
+      } catch (cleanupError) {
+        console.error("Failed to clean up file after error:", cleanupError);
+      }
+    }
+
+    res.status(500).json({
+      error: "Quick summary failed",
+      message:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Internal server error",
+    });
+  }
+});
+
 router.post("/analyze", upload.single("file"), async (req, res) => {
   try {
     if (!req.file) {

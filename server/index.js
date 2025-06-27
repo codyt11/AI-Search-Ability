@@ -69,6 +69,6 @@ app.use("*", (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 AI Readiness Analyzer server running on port ${PORT}`);
+  console.log(`🚀 Search-Ready AI Analyzer server running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
 });

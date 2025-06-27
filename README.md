@@ -1,6 +1,6 @@
-# AI Readiness Analyzer
+# Search-Ready AI Analyzer
 
-A comprehensive web application for analyzing digital assets and evaluating their compatibility with Large Language Models (LLMs). Automatically analyze PDFs, web copy, emails, and training materials to optimize them for AI readiness.
+A comprehensive web application for analyzing digital assets and evaluating their compatibility with Large Language Models (LLMs). Automatically analyze PDFs, web copy, emails, and training materials to optimize them for search-readiness.
 
 ## Features
 

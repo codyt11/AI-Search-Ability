@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 Setting up AI Readiness Analyzer..."
+echo "🚀 Setting up Search-Ready AI Analyzer..."
 
 # Create necessary directories
 mkdir -p server/uploads

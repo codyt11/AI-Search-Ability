@@ -1,7 +1,5 @@
 import { useState } from "react";
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -21,6 +19,10 @@ import {
   Brain,
   Shield,
 } from "lucide-react";
+import ContentGapInsights from "../components/ContentGapInsights";
+import ActionableInsights from "../components/ActionableInsights";
+import DataExport from "../components/DataExport";
+import IndustrySelector from "../components/IndustrySelector";
 
 interface ContentGap {
   id: string;
@@ -38,22 +40,15 @@ interface ContentGap {
   trend: "increasing" | "stable" | "decreasing";
   relatedPrompts: string[];
   recommendedActions: string[];
-  potentialROI: string;
-  regulatoryImplications: string[];
-}
 
-interface GapTrend {
-  date: string;
-  newGaps: number;
-  resolvedGaps: number;
-  totalGaps: number;
-  criticalGaps: number;
+  regulatoryImplications: string[];
 }
 
 const ContentGapAnalysis = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [timeRange, setTimeRange] = useState("30d");
   const [sortBy, setSortBy] = useState("urgencyScore");
+  const [selectedIndustry, setSelectedIndustry] = useState("life-sciences");
 
   // Mock dynamic content gaps based on prompt analysis
   const contentGaps: ContentGap[] = [
@@ -82,7 +77,7 @@ const ContentGapAnalysis = () => {
         "Develop patient counseling materials",
         "Update prescribing information",
       ],
-      potentialROI: "High - Reduces liability, improves patient safety",
+
       regulatoryImplications: [
         "FDA labeling update required",
         "MLR review mandatory",
@@ -113,7 +108,7 @@ const ContentGapAnalysis = () => {
         "Develop dosing calculators",
         "Create age-appropriate materials",
       ],
-      potentialROI: "Medium - Expands market reach, ensures compliance",
+
       regulatoryImplications: [
         "Pediatric study data review",
         "Label expansion needed",
@@ -144,7 +139,7 @@ const ContentGapAnalysis = () => {
         "Create multimedia content",
         "Develop mobile-friendly resources",
       ],
-      potentialROI: "Medium - Improves adherence, patient outcomes",
+
       regulatoryImplications: [
         "Medical review required",
         "Claims substantiation",
@@ -168,14 +163,14 @@ const ContentGapAnalysis = () => {
       relatedPrompts: [
         "How does [our drug] compare to [competitor]?",
         "Efficacy comparison studies",
-        "Cost-effectiveness analysis",
+        "Comparative effectiveness analysis",
       ],
       recommendedActions: [
         "Conduct systematic literature review",
         "Develop evidence summaries",
         "Create comparison matrices",
       ],
-      potentialROI: "High - Competitive advantage, supports positioning",
+
       regulatoryImplications: [
         "Fair balance required",
         "Substantiation needed",
@@ -206,53 +201,8 @@ const ContentGapAnalysis = () => {
         "Create monitoring guidelines",
         "Develop physician resources",
       ],
-      potentialROI: "Medium - Risk mitigation, regulatory compliance",
-      regulatoryImplications: ["REMS consideration", "Periodic safety updates"],
-    },
-  ];
 
-  const gapTrendData: GapTrend[] = [
-    {
-      date: "Week 1",
-      newGaps: 12,
-      resolvedGaps: 8,
-      totalGaps: 45,
-      criticalGaps: 15,
-    },
-    {
-      date: "Week 2",
-      newGaps: 15,
-      resolvedGaps: 6,
-      totalGaps: 54,
-      criticalGaps: 18,
-    },
-    {
-      date: "Week 3",
-      newGaps: 9,
-      resolvedGaps: 11,
-      totalGaps: 52,
-      criticalGaps: 16,
-    },
-    {
-      date: "Week 4",
-      newGaps: 18,
-      resolvedGaps: 7,
-      totalGaps: 63,
-      criticalGaps: 22,
-    },
-    {
-      date: "Week 5",
-      newGaps: 6,
-      resolvedGaps: 14,
-      totalGaps: 55,
-      criticalGaps: 18,
-    },
-    {
-      date: "Week 6",
-      newGaps: 11,
-      resolvedGaps: 9,
-      totalGaps: 57,
-      criticalGaps: 19,
+      regulatoryImplications: ["REMS consideration", "Periodic safety updates"],
     },
   ];
 
@@ -391,9 +341,9 @@ const ContentGapAnalysis = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-400">
-                Est. Business Impact
+                Failed Prompts/Month
               </p>
-              <p className="text-2xl font-bold text-white">$2.4M</p>
+              <p className="text-2xl font-bold text-white">19.8K</p>
             </div>
             <div className="p-3 rounded-lg bg-gradient-to-br from-green-600/20 to-blue-600/20">
               <Target className="h-6 w-6 text-green-400" />
@@ -401,57 +351,29 @@ const ContentGapAnalysis = () => {
           </div>
           <div className="mt-4">
             <span className="text-sm font-medium status-positive">
-              ROI opportunity
+              Improvement opportunity
             </span>
           </div>
         </div>
       </div>
 
-      {/* Gap Trends */}
-      <div className="card p-6">
-        <h2 className="text-xl font-bold text-white mb-6">
-          Content Gap Trends
-        </h2>
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={gapTrendData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey="date" stroke="#9CA3AF" fontSize={12} />
-            <YAxis stroke="#9CA3AF" fontSize={12} />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "#1f2937",
-                border: "1px solid #374151",
-                borderRadius: "8px",
-                color: "#f9fafb",
-              }}
-            />
-            <Line
-              type="monotone"
-              dataKey="newGaps"
-              stroke="#ef4444"
-              strokeWidth={3}
-              name="New Gaps"
-              dot={{ fill: "#ef4444", strokeWidth: 2, r: 4 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="resolvedGaps"
-              stroke="#10b981"
-              strokeWidth={3}
-              name="Resolved Gaps"
-              dot={{ fill: "#10b981", strokeWidth: 2, r: 4 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="criticalGaps"
-              stroke="#f59e0b"
-              strokeWidth={3}
-              name="Critical Gaps"
-              dot={{ fill: "#f59e0b", strokeWidth: 2, r: 4 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      {/* Industry Selector */}
+      <IndustrySelector
+        selectedIndustry={selectedIndustry}
+        onIndustryChange={setSelectedIndustry}
+      />
+
+      {/* Content Gap Insights - Replaces confusing line chart */}
+      <ContentGapInsights selectedIndustry={selectedIndustry} />
+
+      {/* Actionable Insights */}
+      <ActionableInsights
+        fileName="uploaded document"
+        selectedIndustry={selectedIndustry}
+      />
+
+      {/* Data Export */}
+      <DataExport selectedIndustry={selectedIndustry} />
 
       {/* Filter and Sort Controls */}
       <div className="flex items-center justify-between">
@@ -579,10 +501,6 @@ const ContentGapAnalysis = () => {
                   <span>Business Impact</span>
                 </h4>
                 <div className="space-y-2">
-                  <div className="text-xs">
-                    <span className="text-gray-400">ROI: </span>
-                    <span className="text-green-300">{gap.potentialROI}</span>
-                  </div>
                   <div className="text-xs">
                     <span className="text-gray-400">Compliance Risk: </span>
                     <span
