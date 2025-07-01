@@ -1,0 +1,296 @@
+{
+  "landing_pages": [
+    {
+      "id": "landing_001",
+      "title": "AI-Powered Email Marketing Platform",
+      "url": "https://example.com/ai-email-marketing",
+      "industry": "Marketing Technology",
+      "content_type": "SaaS Landing Page",
+      "content": {
+        "main_headline": "Double Your Email Open Rates with AI-Driven Personalization",
+        "subheadline": "Our intelligent email platform analyzes customer behavior to send the perfect message at the perfect time, automatically.",
+        "hero_text": "Transform your email marketing with artificial intelligence that learns from every click, open, and conversion. Join 15,000+ marketers achieving 40% higher engagement rates.",
+        "key_features": [
+          "AI-powered send time optimization",
+          "Intelligent subject line generation",
+          "Automated A/B testing at scale",
+          "Predictive customer lifetime value",
+          "Dynamic content personalization"
+        ],
+        "social_proof": "Trusted by companies like Shopify, HubSpot, and Mailchimp",
+        "cta_primary": "Start Free 14-Day Trial",
+        "cta_secondary": "Watch 2-Minute Demo"
+      },
+      "seo_optimization": {
+        "title_tag": "AI Email Marketing Platform - Increase Open Rates by 40% | EmailAI",
+        "meta_description": "Boost email engagement with AI-powered personalization. Automated send time optimization, smart subject lines, and predictive analytics. Free trial available.",
+        "h1": "AI-Powered Email Marketing That Actually Works",
+        "target_keywords": [
+          "AI email marketing",
+          "email automation platform",
+          "personalized email campaigns",
+          "email marketing software",
+          "automated email marketing"
+        ]
+      },
+      "visual_elements": {
+        "hero_image": "/demo-content/images/email-dashboard-interface.jpg",
+        "hero_alt": "Modern email marketing dashboard showing AI analytics, campaign performance metrics, and automated workflow builder",
+        "feature_images": [
+          {
+            "src": "/demo-content/images/ai-optimization-charts.jpg",
+            "alt": "AI optimization charts showing improved open rates and click-through rates over time"
+          },
+          {
+            "src": "/demo-content/images/personalization-engine.jpg",
+            "alt": "Personalization engine interface displaying customer segments and targeted messaging"
+          }
+        ],
+        "testimonial_images": [
+          {
+            "src": "/demo-content/images/customer-testimonial-1.jpg",
+            "alt": "Marketing director headshot with quote about 40% improvement in email performance"
+          }
+        ]
+      },
+      "ai_readiness_analysis": {
+        "structure_score": 95,
+        "keyword_optimization": 88,
+        "content_clarity": 92,
+        "ai_query_coverage": 85,
+        "conversion_optimization": 90,
+        "strengths": [
+          "Clear value proposition with specific metrics",
+          "Comprehensive keyword coverage",
+          "Strong social proof elements",
+          "Mobile-optimized content structure"
+        ],
+        "improvement_areas": [
+          "Add FAQ section for common queries",
+          "Include more specific use case examples",
+          "Enhance local SEO elements",
+          "Add video testimonials"
+        ],
+        "ai_discovery_potential": {
+          "query_matches": [
+            "best AI email marketing platform 2024",
+            "how to improve email open rates with AI",
+            "automated email marketing software comparison",
+            "AI-powered email personalization tools"
+          ],
+          "content_gaps": [
+            "Pricing comparison with competitors",
+            "Integration capabilities details",
+            "GDPR compliance information",
+            "Customer onboarding process"
+          ]
+        }
+      }
+    },
+    {
+      "id": "landing_002",
+      "title": "Sustainable Fashion E-commerce Store",
+      "url": "https://example.com/eco-fashion",
+      "industry": "Sustainable Fashion",
+      "content_type": "E-commerce Product Page",
+      "content": {
+        "main_headline": "Ethical Fashion That Doesn't Compromise on Style",
+        "subheadline": "Discover our curated collection of sustainable clothing made from organic materials by fair-trade artisans.",
+        "hero_text": "Fashion with a conscience. Every piece in our collection is ethically sourced, environmentally friendly, and designed to last. Join the sustainable fashion revolution.",
+        "key_features": [
+          "100% organic and recycled materials",
+          "Fair-trade certified production",
+          "Carbon-neutral shipping",
+          "Lifetime repair guarantee",
+          "Transparent supply chain"
+        ],
+        "social_proof": "Over 50,000 eco-conscious customers worldwide",
+        "cta_primary": "Shop Sustainable Collection",
+        "cta_secondary": "Learn Our Story"
+      },
+      "seo_optimization": {
+        "title_tag": "Sustainable Fashion | Ethical Clothing | Organic Materials | EcoStyle",
+        "meta_description": "Shop ethical fashion made from organic materials. Fair-trade certified, carbon-neutral shipping, lifetime repair guarantee. Sustainable clothing that lasts.",
+        "h1": "Sustainable Fashion Collection - Ethical Clothing for Conscious Consumers",
+        "target_keywords": [
+          "sustainable fashion",
+          "ethical clothing",
+          "organic fashion",
+          "eco-friendly clothing",
+          "fair trade fashion"
+        ]
+      },
+      "visual_elements": {
+        "hero_image": "/demo-content/images/sustainable-fashion-hero.jpg",
+        "hero_alt": "Model wearing organic cotton dress in natural outdoor setting, showcasing sustainable fashion aesthetic",
+        "product_images": [
+          {
+            "src": "/demo-content/images/organic-cotton-collection.jpg",
+            "alt": "Organic cotton clothing collection laid flat showing natural textures and earth-tone colors"
+          },
+          {
+            "src": "/demo-content/images/fair-trade-production.jpg",
+            "alt": "Fair-trade artisans working on sustainable fashion pieces in ethical production facility"
+          }
+        ],
+        "lifestyle_images": [
+          {
+            "src": "/demo-content/images/sustainable-lifestyle.jpg",
+            "alt": "Eco-conscious woman wearing sustainable fashion in urban environment, representing ethical lifestyle choices"
+          }
+        ]
+      },
+      "ai_readiness_analysis": {
+        "structure_score": 87,
+        "keyword_optimization": 91,
+        "content_clarity": 89,
+        "ai_query_coverage": 82,
+        "conversion_optimization": 85,
+        "strengths": [
+          "Strong ethical positioning",
+          "Clear sustainability messaging",
+          "Comprehensive product information",
+          "Authentic brand storytelling"
+        ],
+        "improvement_areas": [
+          "Add size guide and fit information",
+          "Include customer reviews and ratings",
+          "Enhance mobile shopping experience",
+          "Add sustainability certifications details"
+        ],
+        "ai_discovery_potential": {
+          "query_matches": [
+            "best sustainable fashion brands 2024",
+            "where to buy ethical clothing online",
+            "organic cotton clothing brands",
+            "fair trade fashion companies"
+          ],
+          "content_gaps": [
+            "Care instructions for organic materials",
+            "Return and exchange policy details",
+            "Size guide and measurements",
+            "Shipping and delivery information"
+          ]
+        }
+      }
+    },
+    {
+      "id": "landing_003",
+      "title": "Digital Marketing Agency Services",
+      "url": "https://example.com/digital-marketing-agency",
+      "industry": "Digital Marketing",
+      "content_type": "Service Provider Landing Page",
+      "content": {
+        "main_headline": "Grow Your Business with Data-Driven Digital Marketing",
+        "subheadline": "We help ambitious companies achieve 3x growth through strategic SEO, paid advertising, and conversion optimization.",
+        "hero_text": "Stop guessing and start growing. Our proven digital marketing strategies have generated over $50M in revenue for our clients. Let's scale your business together.",
+        "key_features": [
+          "SEO campaigns that increase organic traffic by 300%",
+          "PPC management with 4:1 average ROAS",
+          "Conversion rate optimization",
+          "Content marketing strategy",
+          "Marketing automation setup"
+        ],
+        "social_proof": "Trusted by 200+ companies from startups to Fortune 500",
+        "cta_primary": "Get Free Marketing Audit",
+        "cta_secondary": "View Case Studies"
+      },
+      "seo_optimization": {
+        "title_tag": "Digital Marketing Agency | SEO, PPC & Growth Marketing | GrowthCo",
+        "meta_description": "Results-driven digital marketing agency. We increase organic traffic by 300% and deliver 4:1 ROAS. Free marketing audit available.",
+        "h1": "Digital Marketing Agency That Delivers Measurable Growth",
+        "target_keywords": [
+          "digital marketing agency",
+          "SEO services",
+          "PPC management",
+          "growth marketing",
+          "marketing agency"
+        ]
+      },
+      "visual_elements": {
+        "hero_image": "/demo-content/images/marketing-dashboard-analytics.jpg",
+        "hero_alt": "Digital marketing analytics dashboard displaying traffic growth, conversion metrics, and ROI calculations",
+        "case_study_images": [
+          {
+            "src": "/demo-content/images/client-growth-charts.jpg",
+            "alt": "Case study showing client website traffic and revenue growth over 12-month period"
+          },
+          {
+            "src": "/demo-content/images/seo-ranking-improvements.jpg",
+            "alt": "SEO ranking improvements chart showing keyword position increases and organic traffic growth"
+          }
+        ],
+        "team_images": [
+          {
+            "src": "/demo-content/images/marketing-team-photo.jpg",
+            "alt": "Professional digital marketing team in modern office discussing strategy and analytics"
+          }
+        ]
+      },
+      "ai_readiness_analysis": {
+        "structure_score": 93,
+        "keyword_optimization": 94,
+        "content_clarity": 91,
+        "ai_query_coverage": 88,
+        "conversion_optimization": 92,
+        "strengths": [
+          "Specific performance metrics and ROI claims",
+          "Strong industry keyword coverage",
+          "Clear service differentiation",
+          "Compelling social proof"
+        ],
+        "improvement_areas": [
+          "Add industry-specific case studies",
+          "Include team credentials and certifications",
+          "Enhance local SEO optimization",
+          "Add detailed pricing information"
+        ],
+        "ai_discovery_potential": {
+          "query_matches": [
+            "best digital marketing agency near me",
+            "how to increase website traffic with SEO",
+            "PPC management services cost",
+            "digital marketing agency case studies"
+          ],
+          "content_gaps": [
+            "Service pricing and packages",
+            "Client onboarding process",
+            "Industry specialization details",
+            "Team experience and credentials"
+          ]
+        }
+      }
+    }
+  ],
+  "optimization_categories": [
+    "SEO-Optimized Landing Pages",
+    "Conversion-Focused Content",
+    "AI Discovery Enhancement",
+    "Visual-Content Integration"
+  ],
+  "demo_use_cases": [
+    {
+      "scenario": "SaaS Product Launch",
+      "description": "Optimize landing pages for AI discovery during product launches",
+      "focus_areas": [
+        "feature clarity",
+        "competitive positioning",
+        "conversion optimization"
+      ]
+    },
+    {
+      "scenario": "E-commerce Product Pages",
+      "description": "Enhance product discoverability through AI-optimized descriptions",
+      "focus_areas": [
+        "product benefits",
+        "customer intent matching",
+        "purchase decision support"
+      ]
+    },
+    {
+      "scenario": "Service Provider Marketing",
+      "description": "Improve service pages for local and industry-specific queries",
+      "focus_areas": ["local SEO", "expertise demonstration", "trust building"]
+    }
+  ]
+}
