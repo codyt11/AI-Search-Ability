@@ -18,10 +18,21 @@ import {
   ChevronUp,
   Database,
   HelpCircle,
+  Plus,
+  Upload,
+  X,
+  File,
+  FileImage,
+  FileSpreadsheet,
 } from "lucide-react";
 import { getIndustryById } from "../utils/industryData";
 import IndustrySelector from "../components/IndustrySelector";
 import LLMConfiguration from "../components/LLMConfiguration";
+import demoContentService, {
+  DemoAdvertisement,
+  DemoLandingPage,
+  DemoImage,
+} from "../services/demoContent";
 
 interface ContentChunk {
   id: string;
@@ -52,70 +63,149 @@ const PromptSimulator = () => {
   const [expandedChunks, setExpandedChunks] = useState<Set<string>>(new Set());
   const [showAskAnythingTooltip, setShowAskAnythingTooltip] = useState(false);
 
-  // Get industry-specific content chunks
-  const industryData = getIndustryById(selectedIndustry);
-  const originalMockContentChunks = industryData?.mockContentChunks || [];
-  const mockContentChunks: ContentChunk[] = originalMockContentChunks.map(
-    (chunk) => ({
-      id: chunk.id,
-      title: chunk.title,
-      content: chunk.content,
-      source: chunk.source,
-      type: chunk.category as
-        | "product_info"
-        | "training"
-        | "compliance"
-        | "faq"
-        | "clinical",
-      lastUpdated: chunk.lastUpdated,
-    })
-  ) || [
-    {
-      id: "chunk-1",
-      title: "FDA Approval Status",
-      content:
-        "Skyrizi (risankizumab-rzaa) is FDA-approved for the treatment of moderate-to-severe plaque psoriasis in adults who are candidates for systemic therapy or phototherapy. It received initial approval in April 2019.",
-      source: "Product Labeling v2.1",
-      type: "product_info",
-      lastUpdated: "2024-01-15",
-    },
-    {
-      id: "chunk-2",
-      title: "Sales Training Basics",
-      content:
-        "New sales representatives should complete the foundational training program which includes: product knowledge modules, competitive landscape overview, compliance requirements, and customer interaction guidelines. The program takes 2-3 weeks to complete.",
-      source: "Sales Training Manual v4.2",
-      type: "training",
-      lastUpdated: "2024-01-10",
-    },
-    {
-      id: "chunk-3",
-      title: "Dosing and Administration",
-      content:
-        "The recommended dose is 150 mg administered by subcutaneous injection at weeks 0 and 4, and every 12 weeks thereafter. Pre-filled syringes and pen injectors are available.",
-      source: "Prescribing Information",
-      type: "product_info",
-      lastUpdated: "2024-01-12",
-    },
-    {
-      id: "chunk-4",
-      title: "Adverse Event Reporting",
-      content:
-        "All adverse events must be reported within 24 hours to the safety department. Use form AE-2024 and include patient details, event description, concomitant medications, and outcome.",
-      source: "Safety Procedures Guide",
-      type: "compliance",
-      lastUpdated: "2024-01-08",
-    },
-    {
-      id: "chunk-5",
-      title: "Insurance Coverage",
-      content:
-        "Most major insurance plans cover Skyrizi with prior authorization. The manufacturer offers patient assistance programs for eligible patients. Average copay with insurance is $10-50.",
-      source: "Access & Reimbursement Guide",
-      type: "faq",
-      lastUpdated: "2024-01-14",
-    },
-  ];
+  // Content management states
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [userContentChunks, setUserContentChunks] = useState<ContentChunk[]>(
+    []
+  );
+
+  // Get pharmaceutical content from demo content library
+  const createContentChunksFromDemoContent = (): ContentChunk[] => {
+    const chunks: ContentChunk[] = [];
+
+    // Check if we're running locally
+    const isLocalhost =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1" ||
+      window.location.hostname === "";
+
+    if (isLocalhost) {
+      // Get demo content
+      const advertisements = demoContentService.getAdvertisements();
+      const landingPages = demoContentService.getLandingPages();
+      const images = demoContentService.getImages();
+
+      // Convert advertisements to content chunks
+      advertisements.forEach((ad, index) => {
+        chunks.push({
+          id: `ad-${index + 1}`,
+          title: ad.title,
+          content: `${ad.content.headline}\n\n${
+            ad.content.description
+          }\n\nCall to Action: ${ad.content.cta}\n\nBody Text: ${
+            ad.content.body_text
+          }\n\nKey Benefits: ${ad.content.benefits?.join(
+            ", "
+          )}\n\nTarget Keywords: ${ad.content.keywords?.join(", ")}`,
+          source: `${ad.platform} Advertisement`,
+          type: "product_info",
+          lastUpdated: "2024-01-15",
+        });
+      });
+
+      // Convert landing pages to content chunks
+      landingPages.forEach((page, index) => {
+        chunks.push({
+          id: `page-${index + 1}`,
+          title: page.title,
+          content: `${page.content.main_headline}\n\n${
+            page.content.subheadline
+          }\n\nHero Text: ${
+            page.content.hero_text
+          }\n\nKey Features: ${page.content.key_features?.join(
+            ", "
+          )}\n\nSocial Proof: ${page.content.social_proof}\n\nPrimary CTA: ${
+            page.content.cta_primary
+          }\n\nSecondary CTA: ${page.content.cta_secondary}`,
+          source: `Landing Page - Pharmaceutical`,
+          type: "product_info",
+          lastUpdated: "2024-01-16",
+        });
+      });
+
+      // Convert images to content chunks
+      images.forEach((image, index) => {
+        chunks.push({
+          id: `img-${index + 1}`,
+          title: image.title,
+          content: `Primary Message: ${
+            image.content.primary_text
+          }\n\nExtracted Text: ${image.content.extracted_text?.join(
+            ", "
+          )}\n\nVisual Elements: ${image.content.visual_elements?.join(
+            ", "
+          )}\n\nBrand Elements: ${image.content.brand_elements?.join(
+            ", "
+          )}\n\nTarget Queries: ${image.ai_optimization?.query_coverage?.join(
+            ", "
+          )}`,
+          source: `${image.format} - Visual Content`,
+          type: "product_info",
+          lastUpdated: "2024-01-17",
+        });
+      });
+    }
+
+    // Add pharmaceutical-specific content chunks for better coverage
+    chunks.push(
+      {
+        id: "pharma-1",
+        title: "Loramin Allergy Medication - Dosage Information",
+        content:
+          "Loramin (Loratadine) is an antihistamine for treating seasonal and perennial allergic rhinitis and allergic conjunctivitis. Standard adult dosage is 10mg once daily. For children 6-12 years: 5mg once daily. Can be taken with or without food. Do not exceed recommended dosage.",
+        source: "Loramin Prescribing Information",
+        type: "product_info",
+        lastUpdated: "2024-01-15",
+      },
+      {
+        id: "pharma-2",
+        title: "ERASTAPEX TRIO - Hypertension Management",
+        content:
+          "ERASTAPEX TRIO combines Erastapex/Amlodipine/HCT (40mg/5mg/12.5mg) for comprehensive blood pressure control. Triple combination therapy for patients requiring multiple antihypertensive agents. Monitor blood pressure regularly. Contains 30 film-coated tablets per package.",
+        source: "ERASTAPEX TRIO Product Information",
+        type: "product_info",
+        lastUpdated: "2024-01-16",
+      },
+      {
+        id: "pharma-3",
+        title: "LDL Cholesterol Management - Beyond Statins",
+        content:
+          "For patients with poorly controlled LDL-C despite statin therapy, additional treatment options are available. Millions of high-risk patients with hypercholesterolemia continue to have elevated LDL-C levels. Sanofi and Regeneron provide comprehensive resources for lipid management.",
+        source: "Cholesterol Management Guidelines",
+        type: "clinical",
+        lastUpdated: "2024-01-17",
+      },
+      {
+        id: "pharma-4",
+        title: "Pharmaceutical Safety Information",
+        content:
+          "All pharmaceutical products require proper safety information disclosure. Report adverse events promptly. Ensure patient counseling on proper medication use, potential side effects, and drug interactions. Maintain regulatory compliance in all marketing materials.",
+        source: "FDA Safety Guidelines",
+        type: "compliance",
+        lastUpdated: "2024-01-14",
+      },
+      {
+        id: "pharma-5",
+        title: "Patient Education Resources",
+        content:
+          "Effective patient education improves medication adherence and outcomes. Provide clear instructions on dosage timing, administration methods, and lifestyle modifications. Include information about when to contact healthcare providers.",
+        source: "Patient Education Guidelines",
+        type: "faq",
+        lastUpdated: "2024-01-13",
+      }
+    );
+
+    return chunks;
+  };
+
+  const mockContentChunks = createContentChunksFromDemoContent();
+  const originalMockContentChunks = mockContentChunks; // Keep reference for confidence calculation
+
+  // Combine mock content with user content
+  const allContentChunks = [...mockContentChunks, ...userContentChunks];
 
   const calculateSimilarity = (prompt: string, chunk: ContentChunk): number => {
     // Simple similarity calculation (in real app, this would use embeddings/semantic search)
@@ -164,7 +254,7 @@ const PromptSimulator = () => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     // Calculate similarities and find best match
-    const scoredChunks = mockContentChunks
+    const scoredChunks = allContentChunks
       .map((chunk) => ({
         chunk,
         score: calculateSimilarity(prompt, chunk),
@@ -216,12 +306,15 @@ const PromptSimulator = () => {
     return "text-red-400";
   };
 
-  const examplePrompts = industryData?.commonPrompts || [
-    "Is this product FDA approved?",
-    "How do I train new sales reps?",
-    "What's the recommended dosage?",
-    "How do I report side effects?",
-    "Does insurance cover this medication?",
+  const examplePrompts = [
+    "What is the correct Loramin dosage for adults?",
+    "How does ERASTAPEX TRIO help with blood pressure?",
+    "What are the side effects of Loramin?",
+    "Can I take ERASTAPEX TRIO with other medications?",
+    "How should I manage LDL cholesterol beyond statins?",
+    "What safety information should patients know?",
+    "How often should blood pressure be monitored?",
+    "What allergy symptoms does Loramin treat?",
   ];
 
   const toggleChunkExpansion = (chunkId: string) => {
@@ -270,6 +363,70 @@ const PromptSimulator = () => {
     }
   };
 
+  // Content management functions
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    setUploadedFiles((prev) => [...prev, ...files]);
+  };
+
+  const removeUploadedFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const processUploadedFiles = async () => {
+    if (uploadedFiles.length === 0) return;
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    // Simulate file processing
+    for (let i = 0; i < uploadedFiles.length; i++) {
+      const file = uploadedFiles[i];
+
+      // Simulate processing delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Create content chunk from file
+      const contentChunk: ContentChunk = {
+        id: `user-${Date.now()}-${i}`,
+        title: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension
+        content: `Content extracted from ${file.name}. This is a sample content chunk that would be created from your uploaded file. In a real implementation, this would use OCR, text extraction, or other processing methods to extract actual content from the file.`,
+        source: `Uploaded: ${file.name}`,
+        type: inferContentType(file),
+        lastUpdated: new Date().toISOString().split("T")[0],
+      };
+
+      setUserContentChunks((prev) => [...prev, contentChunk]);
+      setUploadProgress(((i + 1) / uploadedFiles.length) * 100);
+    }
+
+    setIsUploading(false);
+    setUploadedFiles([]);
+    setShowUploadModal(false);
+  };
+
+  const inferContentType = (file: File): ContentChunk["type"] => {
+    const name = file.name.toLowerCase();
+    if (name.includes("faq") || name.includes("question")) return "faq";
+    if (name.includes("train") || name.includes("guide")) return "training";
+    if (name.includes("compliance") || name.includes("policy"))
+      return "compliance";
+    if (name.includes("clinical") || name.includes("study")) return "clinical";
+    return "product_info";
+  };
+
+  const getFileIcon = (file: File) => {
+    const type = file.type;
+    if (type.startsWith("image/")) return <FileImage className="h-4 w-4" />;
+    if (type.includes("spreadsheet") || type.includes("excel"))
+      return <FileSpreadsheet className="h-4 w-4" />;
+    return <File className="h-4 w-4" />;
+  };
+
+  const removeUserContent = (id: string) => {
+    setUserContentChunks((prev) => prev.filter((chunk) => chunk.id !== id));
+  };
+
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
@@ -294,38 +451,151 @@ const PromptSimulator = () => {
           <div className="flex items-center space-x-3">
             <Database className="h-6 w-6 text-blue-400" />
             <h2 className="text-xl font-bold text-white">
-              Available Content Library
+              Content Library - What Gets Tested
             </h2>
             <span className="px-2 py-1 bg-blue-900/30 text-blue-300 text-sm rounded-full">
-              {mockContentChunks.length} items
+              {allContentChunks.length} content pieces
             </span>
           </div>
-          <button
-            onClick={() => setShowContentLibrary(!showContentLibrary)}
-            className="btn-secondary flex items-center space-x-2"
-          >
-            {showContentLibrary ? (
-              <>
-                <ChevronUp className="h-4 w-4" />
-                <span>Hide Library</span>
-              </>
-            ) : (
-              <>
-                <ChevronDown className="h-4 w-4" />
-                <span>Show Library</span>
-              </>
-            )}
-          </button>
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={() => setShowUploadModal(true)}
+              className="btn-primary flex items-center space-x-2"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Add Content</span>
+            </button>
+            <button
+              onClick={() => setShowContentLibrary(!showContentLibrary)}
+              className="btn-secondary flex items-center space-x-2"
+            >
+              {showContentLibrary ? (
+                <>
+                  <ChevronUp className="h-4 w-4" />
+                  <span>Hide Details</span>
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-4 w-4" />
+                  <span>Show Details</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
-        <p className="text-gray-400 text-sm mb-4">
-          These are the content pieces your prompts will be compared against.
-          Each has different categories and confidence levels.
-        </p>
+        {/* Always visible content summary */}
+        <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4 mb-4">
+          <h3 className="font-semibold text-blue-300 mb-2">
+            📋 What Content Is Being Tested Against Your Prompts:
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+            <div className="bg-gray-800/50 rounded p-3">
+              <div className="flex items-center space-x-2 mb-2">
+                <span>📋</span>
+                <span className="font-medium text-white">Product Info</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                  {
+                    allContentChunks.filter((c) => c.type === "product_info")
+                      .length
+                  }
+                </span>
+              </div>
+              <p className="text-gray-300 text-xs">
+                Pharmaceutical products: Loramin, ERASTAPEX TRIO, LDL
+                cholesterol management
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 rounded p-3">
+              <div className="flex items-center space-x-2 mb-2">
+                <span>🩺</span>
+                <span className="font-medium text-white">Clinical Info</span>
+                <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">
+                  {allContentChunks.filter((c) => c.type === "clinical").length}
+                </span>
+              </div>
+              <p className="text-gray-300 text-xs">
+                Clinical guidelines, treatment protocols, safety information
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 rounded p-3">
+              <div className="flex items-center space-x-2 mb-2">
+                <span>⚖️</span>
+                <span className="font-medium text-white">Compliance</span>
+                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">
+                  {
+                    allContentChunks.filter((c) => c.type === "compliance")
+                      .length
+                  }
+                </span>
+              </div>
+              <p className="text-gray-300 text-xs">
+                FDA guidelines, regulatory requirements, safety protocols
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 rounded p-3">
+              <div className="flex items-center space-x-2 mb-2">
+                <span>❓</span>
+                <span className="font-medium text-white">FAQ Content</span>
+                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
+                  {allContentChunks.filter((c) => c.type === "faq").length}
+                </span>
+              </div>
+              <p className="text-gray-300 text-xs">
+                Common questions, patient education, usage instructions
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 rounded p-3">
+              <div className="flex items-center space-x-2 mb-2">
+                <span>🎓</span>
+                <span className="font-medium text-white">Training</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                  {allContentChunks.filter((c) => c.type === "training").length}
+                </span>
+              </div>
+              <p className="text-gray-300 text-xs">
+                Training materials, educational guides, best practices
+              </p>
+            </div>
+
+            {userContentChunks.length > 0 && (
+              <div className="bg-gray-800/50 rounded p-3">
+                <div className="flex items-center space-x-2 mb-2">
+                  <span>📁</span>
+                  <span className="font-medium text-white">Your Content</span>
+                  <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                    {userContentChunks.length}
+                  </span>
+                </div>
+                <p className="text-gray-300 text-xs">
+                  Content you've uploaded for testing
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="text-sm text-gray-400 mb-4">
+          <strong>How it works:</strong> When you enter a prompt, the simulator
+          compares it against all {allContentChunks.length} content pieces above
+          using keyword matching to find the best match. The similarity score
+          shows how well your prompt matches each piece of content.
+          {userContentChunks.length === 0 && (
+            <span className="text-blue-400">
+              {" "}
+              Click "Add Content" to test your own materials alongside the
+              pharmaceutical demo content.
+            </span>
+          )}
+        </div>
 
         {showContentLibrary && (
           <div className="space-y-3">
-            {mockContentChunks.map((chunk) => (
+            {allContentChunks.map((chunk) => (
               <div
                 key={chunk.id}
                 className="border border-gray-700 rounded-lg bg-gray-800/30"
@@ -347,6 +617,11 @@ const PromptSimulator = () => {
                         >
                           {chunk.type.replace("_", " ")}
                         </span>
+                        {chunk.id.startsWith("user-") && (
+                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                            Your Content
+                          </span>
+                        )}
                       </div>
 
                       <div className="flex items-center space-x-4 text-sm text-gray-400 mb-3">
@@ -356,9 +631,11 @@ const PromptSimulator = () => {
                         <span>•</span>
                         <span>
                           Confidence:{" "}
-                          {(originalMockContentChunks.find(
-                            (c) => c.id === chunk.id
-                          )?.confidence || 0.9) * 100}
+                          {chunk.id.startsWith("user-")
+                            ? "95"
+                            : chunk.id.startsWith("pharma-")
+                            ? "92"
+                            : "88"}
                           %
                         </span>
                       </div>
@@ -379,15 +656,26 @@ const PromptSimulator = () => {
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => toggleChunkExpansion(chunk.id)}
-                      className="ml-4 flex items-center space-x-1 px-3 py-1 text-xs text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 rounded"
-                    >
-                      <Eye className="h-3 w-3" />
-                      <span>
-                        {expandedChunks.has(chunk.id) ? "Collapse" : "Expand"}
-                      </span>
-                    </button>
+                    <div className="ml-4 flex items-center space-x-2">
+                      <button
+                        onClick={() => toggleChunkExpansion(chunk.id)}
+                        className="flex items-center space-x-1 px-3 py-1 text-xs text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 rounded"
+                      >
+                        <Eye className="h-3 w-3" />
+                        <span>
+                          {expandedChunks.has(chunk.id) ? "Collapse" : "Expand"}
+                        </span>
+                      </button>
+                      {chunk.id.startsWith("user-") && (
+                        <button
+                          onClick={() => removeUserContent(chunk.id)}
+                          className="flex items-center space-x-1 px-3 py-1 text-xs text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded"
+                        >
+                          <X className="h-3 w-3" />
+                          <span>Remove</span>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -495,7 +783,7 @@ const PromptSimulator = () => {
             Try these examples:
           </h3>
           <div className="flex flex-wrap gap-2">
-            {examplePrompts.map((example, index) => (
+            {examplePrompts.map((example: string, index: number) => (
               <button
                 key={index}
                 onClick={() => setPrompt(example)}
@@ -516,139 +804,120 @@ const PromptSimulator = () => {
             <h2 className="text-xl font-bold text-white">Simulation Results</h2>
           </div>
 
-          {/* Top Match */}
-          <div className="space-y-6">
-            <div className="border border-gray-700 rounded-lg p-5 bg-gray-800/50">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-white mb-1">
-                    Top Match: {result.topMatch.title}
+          {/* Primary Result */}
+          <div className="bg-gray-800/50 border border-green-500/30 rounded-lg p-6">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <div className="flex items-center space-x-3 mb-3">
+                  <h3 className="text-lg font-medium text-white">
+                    Best Match Found
                   </h3>
-                  <div className="flex items-center space-x-4 text-sm">
-                    <span className="text-gray-400">
-                      Source: {result.topMatch.source}
+                  <span
+                    className={`px-3 py-1 text-sm font-medium rounded-full ${getConfidenceColor(
+                      result.confidenceLevel
+                    )}`}
+                  >
+                    {result.confidenceLevel} confidence
+                  </span>
+                </div>
+
+                {/* Content source indicator */}
+                <div className="bg-blue-900/30 border border-blue-500/50 rounded-lg p-3 mb-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <span className="text-blue-300 font-medium">
+                      📄 Matched Content:
                     </span>
-                    <span className="text-gray-400">•</span>
-                    <span className="text-gray-400">
-                      Updated: {result.topMatch.lastUpdated}
+                    <span className="text-white font-semibold">
+                      {result.topMatch.title}
                     </span>
                   </div>
+                  <div className="flex items-center space-x-4 text-sm text-blue-200">
+                    <span>Source: {result.topMatch.source}</span>
+                    <span>•</span>
+                    <span>Type: {result.topMatch.type.replace("_", " ")}</span>
+                    <span>•</span>
+                    <span>Updated: {result.topMatch.lastUpdated}</span>
+                  </div>
                 </div>
-                <button className="btn-secondary btn-sm flex items-center space-x-2">
-                  <Edit3 className="h-4 w-4" />
-                  <span>Improve</span>
-                </button>
-              </div>
 
-              {/* Metrics */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-                <div className="flex items-center space-x-2">
-                  <Gauge className="h-4 w-4 text-blue-400" />
-                  <span className="text-sm text-gray-400">Similarity:</span>
+                <h4 className="font-medium text-white mb-2">AI Response:</h4>
+                <p className="text-gray-300 leading-relaxed">
+                  {result.response}
+                </p>
+              </div>
+              <div className="ml-6 text-right">
+                <div className="bg-gray-700 rounded-lg p-3">
                   <span
-                    className={`font-semibold ${getScoreColor(
+                    className={`text-2xl font-bold ${getScoreColor(
                       result.similarityScore
                     )}`}
                   >
                     {result.similarityScore.toFixed(1)}%
                   </span>
+                  <p className="text-xs text-gray-400 mt-1">similarity</p>
                 </div>
-
-                <div className="flex items-center space-x-2">
-                  <TrendingUp className="h-4 w-4 text-purple-400" />
-                  <span className="text-sm text-gray-400">Confidence:</span>
-                  <span
-                    className={`px-2 py-1 text-xs font-medium rounded ${getConfidenceColor(
-                      result.confidenceLevel
-                    )}`}
-                  >
-                    {result.confidenceLevel.toUpperCase()}
-                  </span>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <FileText className="h-4 w-4 text-green-400" />
-                  <span className="text-sm text-gray-400">Type:</span>
-                  <span className="text-sm text-white">
-                    {result.topMatch.type.replace("_", " ")}
-                  </span>
-                </div>
-              </div>
-
-              {/* AI Response */}
-              <div className="bg-gray-900/50 rounded-lg p-4">
-                <h4 className="text-sm font-medium text-gray-300 mb-2">
-                  AI Response:
-                </h4>
-                <p className="text-gray-200 leading-relaxed">
-                  {result.response}
-                </p>
-                <button className="mt-3 text-sm text-blue-400 hover:text-blue-300 flex items-center space-x-1">
-                  <Copy className="h-3 w-3" />
-                  <span>Copy Response</span>
-                </button>
               </div>
             </div>
+          </div>
 
-            {/* Alternative Matches */}
-            {result.alternativeMatches.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  Alternative Matches
-                </h3>
-                <div className="space-y-3">
-                  {result.alternativeMatches.map((chunk, index) => {
-                    const score = calculateSimilarity(result.prompt, chunk);
-                    return (
-                      <div
-                        key={chunk.id}
-                        className="border border-gray-700 rounded-lg p-4 bg-gray-800/30"
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h4 className="font-medium text-white">
-                              {chunk.title}
-                            </h4>
-                            <p className="text-sm text-gray-300 mt-1 line-clamp-2">
-                              {chunk.content.substring(0, 120)}...
-                            </p>
-                          </div>
-                          <div className="ml-4 text-right">
-                            <span
-                              className={`text-sm font-medium ${getScoreColor(
-                                score
-                              )}`}
-                            >
-                              {score.toFixed(1)}%
-                            </span>
-                            <p className="text-xs text-gray-400">
-                              {chunk.source}
-                            </p>
-                          </div>
+          {/* Alternative Matches */}
+          {result.alternativeMatches.length > 0 && (
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-4">
+                Alternative Matches
+              </h3>
+              <div className="space-y-3">
+                {result.alternativeMatches.map((chunk, index) => {
+                  const score = calculateSimilarity(result.prompt, chunk);
+                  return (
+                    <div
+                      key={chunk.id}
+                      className="border border-gray-700 rounded-lg p-4 bg-gray-800/30"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="font-medium text-white">
+                            {chunk.title}
+                          </h4>
+                          <p className="text-sm text-gray-300 mt-1 line-clamp-2">
+                            {chunk.content.substring(0, 120)}...
+                          </p>
+                        </div>
+                        <div className="ml-4 text-right">
+                          <span
+                            className={`text-sm font-medium ${getScoreColor(
+                              score
+                            )}`}
+                          >
+                            {score.toFixed(1)}%
+                          </span>
+                          <p className="text-xs text-gray-400">
+                            {chunk.source}
+                          </p>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Improvement Suggestions */}
-            <div className="bg-blue-900/20 border border-blue-700/50 rounded-lg p-4">
-              <div className="flex items-center space-x-2 mb-3">
-                <Zap className="h-5 w-5 text-blue-400" />
-                <h3 className="font-semibold text-white">
-                  Improvement Suggestions
-                </h3>
-              </div>
-              <div className="space-y-2">
-                {result.suggestions.map((suggestion, index) => (
-                  <div key={index} className="flex items-start space-x-2">
-                    <CheckCircle2 className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-blue-200">{suggestion}</span>
-                  </div>
-                ))}
-              </div>
+          {/* Improvement Suggestions */}
+          <div className="bg-blue-900/20 border border-blue-700/50 rounded-lg p-4">
+            <div className="flex items-center space-x-2 mb-3">
+              <Zap className="h-5 w-5 text-blue-400" />
+              <h3 className="font-semibold text-white">
+                Improvement Suggestions
+              </h3>
+            </div>
+            <div className="space-y-2">
+              {result.suggestions.map((suggestion, index) => (
+                <div key={index} className="flex items-start space-x-2">
+                  <CheckCircle2 className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm text-blue-200">{suggestion}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -764,6 +1033,139 @@ const PromptSimulator = () => {
 
         <LLMConfiguration selectedIndustry={selectedIndustry} />
       </div>
+
+      {/* Upload Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-white">
+                Add Content to Library
+              </h2>
+              <button
+                onClick={() => {
+                  setShowUploadModal(false);
+                  setUploadedFiles([]);
+                }}
+                className="text-gray-400 hover:text-white"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              {/* File Upload Area */}
+              <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
+                <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-white mb-2">
+                  Upload Content Files
+                </h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  Drag and drop files here, or click to browse
+                </p>
+                <input
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx,.txt,.md,.png,.jpg,.jpeg"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  id="file-upload"
+                />
+                <label
+                  htmlFor="file-upload"
+                  className="btn-primary inline-flex items-center space-x-2 cursor-pointer"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>Choose Files</span>
+                </label>
+              </div>
+
+              {/* Uploaded Files List */}
+              {uploadedFiles.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-medium text-white mb-3">
+                    Files to Process ({uploadedFiles.length})
+                  </h3>
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    {uploadedFiles.map((file, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="text-blue-400">
+                            {getFileIcon(file)}
+                          </div>
+                          <div>
+                            <p className="text-white font-medium">
+                              {file.name}
+                            </p>
+                            <p className="text-gray-400 text-xs">
+                              {(file.size / 1024 / 1024).toFixed(2)} MB
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => removeUploadedFile(index)}
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Upload Progress */}
+              {isUploading && (
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-white font-medium">
+                      Processing files...
+                    </span>
+                    <span className="text-blue-400">
+                      {Math.round(uploadProgress)}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-700">
+                <button
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    setUploadedFiles([]);
+                  }}
+                  className="btn-secondary"
+                  disabled={isUploading}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={processUploadedFiles}
+                  disabled={uploadedFiles.length === 0 || isUploading}
+                  className="btn-primary flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Upload className="h-4 w-4" />
+                  <span>
+                    {isUploading
+                      ? "Processing..."
+                      : `Process ${uploadedFiles.length} file(s)`}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

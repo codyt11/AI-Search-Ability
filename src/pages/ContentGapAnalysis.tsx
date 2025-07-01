@@ -18,6 +18,7 @@ import {
   RefreshCw,
   Brain,
   Shield,
+  HelpCircle,
 } from "lucide-react";
 import ContentGapInsights from "../components/ContentGapInsights";
 import ActionableInsights from "../components/ActionableInsights";
@@ -49,177 +50,206 @@ const ContentGapAnalysis = () => {
   const [timeRange, setTimeRange] = useState("30d");
   const [sortBy, setSortBy] = useState("urgencyScore");
   const [selectedIndustry, setSelectedIndustry] = useState("life-sciences");
+  const [showFailedPromptsTooltip, setShowFailedPromptsTooltip] =
+    useState(false);
 
   // Mock dynamic content gaps based on prompt analysis
   const contentGaps: ContentGap[] = [
     {
       id: "gap-001",
-      gapType: "Safety Information",
-      title: "Drug Interaction Warnings for Combination Therapies",
+      gapType: "Dosage Information",
+      title: "Loramin Dosage Guidelines for Different Age Groups",
       description:
-        "High-volume prompts seeking specific drug interaction data that current content doesn't adequately address",
-      promptVolume: 8420,
-      failureRate: 67,
-      therapeuticArea: "Cardiology",
-      urgencyScore: 94,
+        "High-volume prompts seeking specific dosage information for Loramin (Loratadine) across different age groups that current advertising doesn't adequately address",
+      promptVolume: 4250,
+      failureRate: 72,
+      therapeuticArea: "Allergy/Immunology",
+      urgencyScore: 88,
       businessImpact: "High",
-      contentType: "Safety Documentation",
-      estimatedEffort: "4-6 weeks",
+      contentType: "Product Information",
+      estimatedEffort: "2-3 weeks",
       complianceRisk: "High",
       trend: "increasing",
       relatedPrompts: [
-        "Can [drug A] be taken with [drug B]?",
-        "What are contraindications for [combination]?",
-        "Monitoring parameters for dual therapy",
+        "What is the correct Loramin dose for children?",
+        "How much Loratadine for adults vs children?",
+        "Loramin dosage for seasonal allergies",
       ],
       recommendedActions: [
-        "Create comprehensive interaction matrix",
-        "Develop patient counseling materials",
-        "Update prescribing information",
+        "Add clear dosage charts to advertisements",
+        "Include age-specific dosing guidance",
+        "Create patient information leaflets",
       ],
-
       regulatoryImplications: [
-        "FDA labeling update required",
-        "MLR review mandatory",
+        "FDA dosing label requirements",
+        "Pediatric safety information needed",
       ],
     },
     {
       id: "gap-002",
-      gapType: "Dosing Guidelines",
-      title: "Pediatric Dosing Protocols",
+      gapType: "Drug Interactions",
+      title: "ERASTAPEX TRIO Combination Therapy Contraindications",
       description:
-        "Significant gap in age-specific dosing information for patients under 18",
-      promptVolume: 6230,
-      failureRate: 78,
-      therapeuticArea: "Oncology",
-      urgencyScore: 89,
+        "Patients and healthcare providers seeking detailed interaction information for the three-drug combination (Erastapex/Amlodipine/HCT) that isn't readily accessible",
+      promptVolume: 3890,
+      failureRate: 83,
+      therapeuticArea: "Cardiology",
+      urgencyScore: 92,
       businessImpact: "High",
-      contentType: "Clinical Guidelines",
-      estimatedEffort: "6-8 weeks",
+      contentType: "Safety Information",
+      estimatedEffort: "4-5 weeks",
       complianceRisk: "High",
       trend: "increasing",
       relatedPrompts: [
-        "Pediatric dosing for [medication]",
-        "Safety in children under 12",
-        "Weight-based dosing calculations",
+        "What drugs interact with ERASTAPEX TRIO?",
+        "Can I take other blood pressure meds with ERASTAPEX?",
+        "ERASTAPEX TRIO contraindications and warnings",
       ],
       recommendedActions: [
-        "Collaborate with pediatric specialists",
-        "Develop dosing calculators",
-        "Create age-appropriate materials",
+        "Develop comprehensive interaction matrix",
+        "Create healthcare provider quick reference",
+        "Update digital prescribing information",
       ],
-
       regulatoryImplications: [
-        "Pediatric study data review",
-        "Label expansion needed",
+        "Complete drug interaction profile required",
+        "Black box warning considerations",
       ],
     },
     {
       id: "gap-003",
-      gapType: "Patient Education",
-      title: "Lifestyle Modification Guidance",
+      gapType: "Clinical Evidence",
+      title: "LDL-C Treatment Efficacy Data Beyond Statins",
       description:
-        "Patients and HCPs seeking comprehensive lifestyle recommendations alongside medication therapy",
-      promptVolume: 5680,
-      failureRate: 45,
-      therapeuticArea: "Diabetes",
-      urgencyScore: 76,
+        "Healthcare professionals requesting specific clinical trial data and effectiveness comparisons for LDL cholesterol management beyond traditional statin therapy",
+      promptVolume: 3420,
+      failureRate: 67,
+      therapeuticArea: "Cardiovascular",
+      urgencyScore: 85,
       businessImpact: "Medium",
-      contentType: "Educational Materials",
-      estimatedEffort: "3-4 weeks",
-      complianceRisk: "Low",
+      contentType: "Clinical Data",
+      estimatedEffort: "6-8 weeks",
+      complianceRisk: "Medium",
       trend: "stable",
       relatedPrompts: [
-        "Diet recommendations with [medication]",
-        "Exercise guidelines for [condition]",
-        "Lifestyle changes to improve outcomes",
+        "Clinical trial results for LDL-C lowering therapies",
+        "Effectiveness vs statins alone",
+        "Long-term cardiovascular outcomes data",
       ],
       recommendedActions: [
-        "Partner with nutrition experts",
-        "Create multimedia content",
-        "Develop mobile-friendly resources",
+        "Compile clinical evidence summaries",
+        "Create comparative effectiveness materials",
+        "Develop physician education resources",
       ],
-
       regulatoryImplications: [
-        "Medical review required",
-        "Claims substantiation",
+        "FDA-approved indication language",
+        "Clinical trial data substantiation",
       ],
     },
     {
       id: "gap-004",
-      gapType: "Comparative Effectiveness",
-      title: "Head-to-Head Study Results",
+      gapType: "Patient Education",
+      title: "Allergy Trigger Identification and Loramin Usage",
       description:
-        "HCPs requesting direct comparisons with competitor therapies that aren't readily available",
-      promptVolume: 4920,
-      failureRate: 82,
-      therapeuticArea: "Mental Health",
-      urgencyScore: 85,
-      businessImpact: "High",
-      contentType: "Clinical Evidence",
-      estimatedEffort: "8-12 weeks",
-      complianceRisk: "Medium",
+        "Patients seeking guidance on when and how to use Loramin for different allergy triggers (seasonal vs perennial) with lifestyle modifications",
+      promptVolume: 2980,
+      failureRate: 58,
+      therapeuticArea: "Allergy/Immunology",
+      urgencyScore: 74,
+      businessImpact: "Medium",
+      contentType: "Patient Education",
+      estimatedEffort: "3-4 weeks",
+      complianceRisk: "Low",
       trend: "increasing",
       relatedPrompts: [
-        "How does [our drug] compare to [competitor]?",
-        "Efficacy comparison studies",
-        "Comparative effectiveness analysis",
+        "When should I take Loramin for pollen allergies?",
+        "How to identify allergy triggers",
+        "Seasonal vs year-round allergy treatment",
       ],
       recommendedActions: [
-        "Conduct systematic literature review",
-        "Develop evidence summaries",
-        "Create comparison matrices",
+        "Create seasonal allergy calendars",
+        "Develop trigger identification guides",
+        "Partner with allergy specialists",
       ],
-
       regulatoryImplications: [
-        "Fair balance required",
-        "Substantiation needed",
+        "Patient education review required",
+        "Medical accuracy verification",
       ],
     },
     {
       id: "gap-005",
-      gapType: "Adverse Events",
-      title: "Long-term Safety Monitoring",
+      gapType: "Monitoring Guidelines",
+      title: "Blood Pressure Monitoring with ERASTAPEX TRIO",
       description:
-        "Insufficient content addressing long-term safety profiles and monitoring protocols",
-      promptVolume: 3840,
-      failureRate: 71,
-      therapeuticArea: "Rare Diseases",
-      urgencyScore: 82,
+        "Insufficient content addressing proper blood pressure monitoring protocols and target ranges for patients on triple combination therapy",
+      promptVolume: 2650,
+      failureRate: 75,
+      therapeuticArea: "Cardiology",
+      urgencyScore: 81,
       businessImpact: "High",
-      contentType: "Safety Monitoring",
-      estimatedEffort: "5-7 weeks",
-      complianceRisk: "High",
+      contentType: "Clinical Guidelines",
+      estimatedEffort: "3-4 weeks",
+      complianceRisk: "Medium",
       trend: "stable",
       relatedPrompts: [
-        "Long-term side effects of [drug]",
-        "Monitoring schedule for [therapy]",
-        "When to discontinue treatment",
+        "How often to check BP on ERASTAPEX TRIO?",
+        "Target blood pressure goals",
+        "Signs of blood pressure too low",
       ],
       recommendedActions: [
-        "Compile post-marketing data",
-        "Create monitoring guidelines",
-        "Develop physician resources",
+        "Create monitoring schedule templates",
+        "Develop patient tracking tools",
+        "Update clinical guidance materials",
       ],
-
-      regulatoryImplications: ["REMS consideration", "Periodic safety updates"],
+      regulatoryImplications: [
+        "Clinical monitoring recommendations",
+        "Safety monitoring protocols",
+      ],
+    },
+    {
+      id: "gap-006",
+      gapType: "Side Effects",
+      title: "Comprehensive Adverse Event Information",
+      description:
+        "Patients and providers seeking detailed side effect profiles and management strategies for all three pharmaceutical products",
+      promptVolume: 2180,
+      failureRate: 69,
+      therapeuticArea: "Multi-Therapeutic",
+      urgencyScore: 79,
+      businessImpact: "High",
+      contentType: "Safety Information",
+      estimatedEffort: "4-5 weeks",
+      complianceRisk: "High",
+      trend: "decreasing",
+      relatedPrompts: [
+        "Loramin side effects and warnings",
+        "ERASTAPEX TRIO adverse reactions",
+        "How to manage medication side effects",
+      ],
+      recommendedActions: [
+        "Develop side effect management guides",
+        "Create patient-friendly safety sheets",
+        "Update physician prescribing tools",
+      ],
+      regulatoryImplications: [
+        "FDA adverse event reporting",
+        "Updated safety labeling",
+      ],
     },
   ];
 
   const therapeuticAreaImpact = [
-    { area: "Cardiology", gaps: 23, volume: 34500, risk: "High" },
-    { area: "Oncology", gaps: 19, volume: 28900, risk: "High" },
-    { area: "Diabetes", gaps: 15, volume: 22100, risk: "Medium" },
-    { area: "Mental Health", gaps: 12, volume: 18600, risk: "Medium" },
-    { area: "Rare Diseases", gaps: 8, volume: 12400, risk: "High" },
+    { area: "Cardiology", gaps: 12, volume: 6540, risk: "High" },
+    { area: "Allergy/Immunology", gaps: 8, volume: 7230, risk: "Medium" },
+    { area: "Cardiovascular", gaps: 6, volume: 3420, risk: "Medium" },
+    { area: "Multi-Therapeutic", gaps: 4, volume: 2180, risk: "High" },
   ];
 
   const gapsByContentType = [
-    { type: "Safety Information", count: 18, priority: "Critical" },
-    { type: "Dosing Guidelines", count: 15, priority: "High" },
-    { type: "Patient Education", count: 12, priority: "Medium" },
-    { type: "Clinical Evidence", count: 10, priority: "High" },
-    { type: "Regulatory Info", count: 8, priority: "Critical" },
+    { type: "Safety Information", count: 8, priority: "Critical" },
+    { type: "Product Information", count: 7, priority: "High" },
+    { type: "Clinical Guidelines", count: 6, priority: "High" },
+    { type: "Patient Education", count: 5, priority: "Medium" },
+    { type: "Clinical Data", count: 4, priority: "Medium" },
   ];
 
   const filteredGaps = contentGaps.filter((gap) => {
@@ -291,7 +321,7 @@ const ContentGapAnalysis = () => {
               <p className="text-sm font-medium text-gray-400">
                 Total Content Gaps
               </p>
-              <p className="text-2xl font-bold text-white">57</p>
+              <p className="text-2xl font-bold text-white">6</p>
             </div>
             <div className="p-3 rounded-lg bg-gradient-to-br from-red-600/20 to-orange-600/20">
               <AlertTriangle className="h-6 w-6 text-red-400" />
@@ -307,7 +337,7 @@ const ContentGapAnalysis = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-400">Critical Gaps</p>
-              <p className="text-2xl font-bold text-white">19</p>
+              <p className="text-2xl font-bold text-white">4</p>
             </div>
             <div className="p-3 rounded-lg bg-gradient-to-br from-red-600/20 to-pink-600/20">
               <Shield className="h-6 w-6 text-red-400" />
@@ -325,7 +355,7 @@ const ContentGapAnalysis = () => {
               <p className="text-sm font-medium text-gray-400">
                 Avg Failure Rate
               </p>
-              <p className="text-2xl font-bold text-white">68%</p>
+              <p className="text-2xl font-bold text-white">71%</p>
             </div>
             <div className="p-3 rounded-lg bg-gradient-to-br from-yellow-600/20 to-orange-600/20">
               <XCircle className="h-6 w-6 text-yellow-400" />
@@ -340,10 +370,49 @@ const ContentGapAnalysis = () => {
         <div className="metric-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-400">
-                Failed Prompts/Month
-              </p>
-              <p className="text-2xl font-bold text-white">19.8K</p>
+              <div className="flex items-center space-x-2 mb-1">
+                <p className="text-sm font-medium text-gray-400">
+                  Failed Prompts/Month
+                </p>
+                <div className="relative">
+                  <button
+                    onMouseEnter={() => setShowFailedPromptsTooltip(true)}
+                    onMouseLeave={() => setShowFailedPromptsTooltip(false)}
+                    className="text-gray-400 hover:text-gray-300 focus:outline-none"
+                  >
+                    <HelpCircle className="h-4 w-4" />
+                  </button>
+                  {showFailedPromptsTooltip && (
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-80 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg z-[9999] border border-gray-700">
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
+                      <div className="font-semibold mb-1 text-yellow-300">
+                        What are Failed Prompts?
+                      </div>
+                      <div className="space-y-1">
+                        <div>
+                          • User questions that AI systems cannot answer
+                          adequately
+                        </div>
+                        <div>
+                          • Occurs when content gaps prevent accurate responses
+                        </div>
+                        <div>
+                          • Includes incomplete, outdated, or missing
+                          information
+                        </div>
+                        <div>
+                          • Results in poor user experience and reduced trust
+                        </div>
+                        <div className="text-blue-300 mt-2">
+                          Reducing failed prompts improves user satisfaction and
+                          content effectiveness.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-white">19.4K</p>
             </div>
             <div className="p-3 rounded-lg bg-gradient-to-br from-green-600/20 to-blue-600/20">
               <Target className="h-6 w-6 text-green-400" />
@@ -387,9 +456,9 @@ const ContentGapAnalysis = () => {
             <option value="critical">Critical Only</option>
             <option value="high-volume">High Volume</option>
             <option value="compliance-risk">Compliance Risk</option>
+            <option value="allergy/immunology">Allergy/Immunology</option>
             <option value="cardiology">Cardiology</option>
-            <option value="oncology">Oncology</option>
-            <option value="diabetes">Diabetes</option>
+            <option value="cardiovascular">Cardiovascular</option>
           </select>
           <select
             value={sortBy}

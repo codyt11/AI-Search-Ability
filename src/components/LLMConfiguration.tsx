@@ -16,6 +16,11 @@ import {
   ChevronLeft,
   ChevronRight,
   HelpCircle,
+  RefreshCw,
+  X,
+  Plus,
+  Edit3,
+  Check,
 } from "lucide-react";
 import LLMConfigManager, { DEFAULT_MODELS } from "../services/llmConfig";
 import LLMTestingService, {
@@ -24,6 +29,11 @@ import LLMTestingService, {
 } from "../services/llmTesting";
 import LLMTestResults from "./LLMTestResults";
 import ContentPreview from "./ContentPreview";
+import demoContentService, {
+  DemoAdvertisement,
+  DemoLandingPage,
+  DemoImage,
+} from "../services/demoContent";
 
 interface Props {
   selectedIndustry: string;
@@ -90,6 +100,16 @@ const LLMConfiguration: React.FC<Props> = ({
   const [showCompetitiveTooltip, setShowCompetitiveTooltip] = useState(false);
   const [showCustomTestTooltip, setShowCustomTestTooltip] = useState(false);
 
+  // Custom prompts state
+  const [customPrompts, setCustomPrompts] = useState<string[]>([]);
+  const [newPrompt, setNewPrompt] = useState("");
+  const [promptMode, setPromptMode] = useState<"generated" | "custom" | "both">(
+    "generated"
+  );
+  const [editingPromptIndex, setEditingPromptIndex] = useState<number | null>(
+    null
+  );
+
   useEffect(() => {
     // Ensure we have a fresh testing service instance
     setTestingService(new LLMTestingService());
@@ -116,54 +136,163 @@ const LLMConfiguration: React.FC<Props> = ({
     });
     setSelectedModels(newSelectedModels);
 
-    // Load mock uploaded files (in real app, this would come from your file upload system)
-    loadMockUploadedFiles();
+    // Load mock uploaded files with a small delay to ensure demo content service is ready
+    setTimeout(() => {
+      loadMockUploadedFiles();
+
+      // If no content loaded, try again after a longer delay
+      setTimeout(() => {
+        if (uploadedFiles.length === 0) {
+          console.log("No content found, retrying...");
+          loadMockUploadedFiles();
+        }
+      }, 1000);
+    }, 100);
   }, []);
 
   const loadMockUploadedFiles = () => {
-    // Mock uploaded files - in real app, this would come from your backend
-    const mockFiles: UploadedContent[] = [
+    const mockFiles: UploadedContent[] = [];
+
+    // Check if we're running locally to load pharmaceutical demo content
+    const isLocalhost =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1" ||
+      window.location.hostname === "";
+
+    console.log("Loading content, isLocalhost:", isLocalhost);
+
+    if (isLocalhost) {
+      try {
+        // Get pharmaceutical demo content
+        const advertisements = demoContentService.getAdvertisements();
+        const landingPages = demoContentService.getLandingPages();
+        const images = demoContentService.getImages();
+
+        console.log("Demo content loaded:", {
+          ads: advertisements.length,
+          pages: landingPages.length,
+          images: images.length,
+        });
+
+        // Convert advertisements to content files
+        advertisements.forEach((ad, index) => {
+          mockFiles.push({
+            id: `ad-${index + 1}`,
+            name: `${ad.title} - ${ad.platform} Ad`,
+            content: `${ad.content.headline}\n\n${
+              ad.content.description
+            }\n\nCall to Action: ${ad.content.cta}\n\nBody Text: ${
+              ad.content.body_text
+            }\n\nKey Benefits: ${ad.content.benefits?.join(
+              ", "
+            )}\n\nTarget Audience: ${
+              ad.content.target_audience
+            }\n\nKeywords: ${ad.content.keywords?.join(", ")}`,
+            type: "advertisement",
+            uploadDate: new Date("2024-01-20"),
+          });
+        });
+
+        // Convert landing pages to content files
+        landingPages.forEach((page, index) => {
+          mockFiles.push({
+            id: `page-${index + 1}`,
+            name: page.title,
+            content: `${page.content.main_headline}\n\n${
+              page.content.subheadline
+            }\n\nHero Text: ${
+              page.content.hero_text
+            }\n\nKey Features: ${page.content.key_features?.join(
+              ", "
+            )}\n\nSocial Proof: ${page.content.social_proof}\n\nPrimary CTA: ${
+              page.content.cta_primary
+            }\n\nSecondary CTA: ${page.content.cta_secondary}`,
+            type: "landing-page",
+            uploadDate: new Date("2024-01-18"),
+          });
+        });
+
+        // Convert images to content files
+        images.forEach((image, index) => {
+          mockFiles.push({
+            id: `img-${index + 1}`,
+            name: image.title,
+            content: `Primary Message: ${
+              image.content.primary_text
+            }\n\nExtracted Text: ${image.content.extracted_text?.join(
+              ", "
+            )}\n\nVisual Elements: ${image.content.visual_elements?.join(
+              ", "
+            )}\n\nBrand Elements: ${image.content.brand_elements?.join(
+              ", "
+            )}\n\nDominant Colors: ${image.ai_analysis?.color_analysis?.dominant_colors?.join(
+              ", "
+            )}\n\nTarget Queries: ${image.ai_optimization?.query_coverage?.join(
+              ", "
+            )}\n\nOptimization Opportunities: ${image.ai_optimization?.optimization_opportunities?.join(
+              ", "
+            )}`,
+            type: image.file_type.toLowerCase(),
+            uploadDate: new Date("2024-01-22"),
+          });
+        });
+      } catch (error) {
+        console.error("Error loading demo content:", error);
+      }
+    }
+
+    // Add pharmaceutical-specific content for comprehensive testing
+    const pharmaceuticalContent: UploadedContent[] = [
       {
-        id: "1",
-        name: "Product Documentation.pdf",
+        id: "pharma-1",
+        name: "Loramin Allergy Medication - Product Information",
         content:
-          "Our advanced AI platform provides real-time analytics and automated insights for business decision making. Features include predictive modeling, data visualization, and automated reporting.",
-        type: "documentation",
+          "Loramin (Loratadine) is a second-generation antihistamine for treating seasonal and perennial allergic rhinitis and allergic conjunctivitis. Standard adult dosage: 10mg once daily. Pediatric dosage (6-12 years): 5mg once daily. Can be taken with or without food. Do not exceed recommended dosage. Common side effects may include drowsiness, dry mouth, and fatigue. Contraindications include hypersensitivity to loratadine. ZADA Pharmaceuticals - committed to allergy relief. Available in tablet and syrup formulations.",
+        type: "product-info",
         uploadDate: new Date("2024-01-15"),
       },
       {
-        id: "2",
-        name: "Security Policy.docx",
+        id: "pharma-2",
+        name: "ERASTAPEX TRIO - Hypertension Management Guide",
         content:
-          "Security features include end-to-end encryption, multi-factor authentication, and SOC 2 compliance. We implement zero-trust architecture and regular security audits.",
-        type: "policy",
-        uploadDate: new Date("2024-01-10"),
+          "ERASTAPEX TRIO combines Olmesartan medoxomil/Amlodipine/Hydrochlorothiazide (40mg/5mg/12.5mg) for comprehensive blood pressure control. Triple combination therapy indicated for patients requiring multiple antihypertensive agents to achieve target blood pressure goals. Monitor blood pressure regularly during treatment. Contains 30 film-coated tablets per package. APEX Pharma - CRASH HYPERTENSION, KEEP IT UNDER CONTROL. Mechanism: ARB blocks angiotensin II receptors, calcium channel blocker relaxes vessels, diuretic reduces fluid retention.",
+        type: "product-info",
+        uploadDate: new Date("2024-01-16"),
       },
       {
-        id: "3",
-        name: "Pricing Guide.pdf",
+        id: "pharma-3",
+        name: "LDL Cholesterol Management - Treatment Guidelines",
         content:
-          "Pricing starts at $99/month for the basic plan, with enterprise options available for larger organizations. Custom pricing available for Fortune 500 companies.",
-        type: "pricing",
-        uploadDate: new Date("2024-01-12"),
+          "For patients with poorly controlled LDL-C despite statin therapy, additional treatment options are available. Millions of high-risk patients with hypercholesterolemia in the US continue to have poorly controlled LDL-C levels. Sanofi and Regeneron are committed to providing comprehensive resources for lipid management. Going beyond today's treatment approaches. Consider combination therapy, lifestyle modifications, and regular monitoring. Target LDL-C levels vary based on cardiovascular risk assessment.",
+        type: "clinical-guidelines",
+        uploadDate: new Date("2024-01-17"),
       },
       {
-        id: "4",
-        name: "API Documentation.md",
+        id: "pharma-4",
+        name: "Pharmaceutical Safety and Compliance Documentation",
         content:
-          "REST API endpoints support JSON requests with OAuth 2.0 authentication. Rate limits apply: 1000 requests per hour for standard plans, unlimited for enterprise.",
-        type: "technical",
-        uploadDate: new Date("2024-01-08"),
+          "All pharmaceutical products require proper safety information disclosure and regulatory compliance. Report adverse events promptly to appropriate authorities. Ensure patient counseling on proper medication use, potential side effects, and drug interactions. Maintain MLR review for all promotional materials. FDA regulations require accurate and balanced presentation of efficacy and safety data. Healthcare provider education on prescribing guidelines and patient monitoring protocols.",
+        type: "compliance",
+        uploadDate: new Date("2024-01-14"),
       },
       {
-        id: "5",
-        name: "ERASTAPEX TRIO - Product Marketing.jpg",
+        id: "pharma-5",
+        name: "Patient Education and Medication Adherence Resources",
         content:
-          'ERASTAPEX TRIO - Olmesartan medoxomil / Amlodipine / Hydrochlorothiazide combination medication for hypertension treatment. Dosage: 40 mg / 5 mg / 12.5 mg. Available as 30 film coated tablets. Manufactured by APEX Pharma. Marketing message: "CRASH HYPERTENSION - KEEP IT UNDER CONTROL". This triple combination therapy provides comprehensive blood pressure management through three complementary mechanisms: Olmesartan (ARB) blocks angiotensin II receptors, Amlodipine (calcium channel blocker) relaxes blood vessels, and Hydrochlorothiazide (diuretic) reduces fluid retention. Indicated for patients requiring multiple antihypertensive agents to achieve target blood pressure goals. Professional healthcare imagery shows anatomical heart with pressure gauge symbolizing blood pressure monitoring and control.',
-        type: "image/jpeg",
-        uploadDate: new Date("2024-01-20"),
+          "Effective patient education improves medication adherence and clinical outcomes. Provide clear instructions on dosage timing, administration methods, and lifestyle modifications. Include information about when to contact healthcare providers. Address common concerns about side effects and drug interactions. Develop multilingual resources for diverse patient populations. Utilize digital tools and mobile apps to support medication reminders and patient engagement.",
+        type: "patient-education",
+        uploadDate: new Date("2024-01-13"),
       },
     ];
+
+    mockFiles.push(...pharmaceuticalContent);
+
+    console.log("Total content files loaded:", mockFiles.length);
+    console.log(
+      "Content files:",
+      mockFiles.map((f) => f.name)
+    );
+
     setUploadedFiles(mockFiles);
   };
 
@@ -293,8 +422,9 @@ const LLMConfiguration: React.FC<Props> = ({
       return;
     }
 
-    if (generatedPrompts.length === 0) {
-      alert("Please generate industry prompts first.");
+    const promptsToTest = getPromptsForTesting();
+    if (promptsToTest.length === 0) {
+      alert("Please generate industry prompts or add custom prompts first.");
       return;
     }
 
@@ -311,7 +441,7 @@ const LLMConfiguration: React.FC<Props> = ({
       const report = await testingService.testIndustryContent(
         selectedIndustry,
         contentChunks,
-        generatedPrompts,
+        promptsToTest,
         testModels
       );
 
@@ -362,13 +492,19 @@ const LLMConfiguration: React.FC<Props> = ({
 
     setIsRunningCompetitiveTest(true);
     try {
-      // Use selected competitive content or demo content
-      const contentToTest =
-        selectedCompetitiveContent.length > 0
-          ? selectedCompetitiveContent.map((c) => c.content)
-          : [
-              "ERASTAPEX TRIO (Olmesartan/Amlodipine/Hydrochlorothiazide) 40mg/5mg/12.5mg - Triple combination therapy for hypertension management",
-            ];
+      // Use selected competitive content or pharmaceutical demo content
+      let contentToTest: string[];
+
+      if (selectedCompetitiveContent.length > 0) {
+        contentToTest = selectedCompetitiveContent.map((c) => c.content);
+      } else {
+        // Use pharmaceutical demo content when nothing is selected
+        contentToTest = [
+          "Loramin (Loratadine) 10mg - Antihistamine for seasonal allergic rhinitis and allergic conjunctivitis. ZADA Pharmaceuticals. Don't let allergy ruin your day!",
+          "ERASTAPEX TRIO (Olmesartan/Amlodipine/HCT) 40mg/5mg/12.5mg - Triple combination therapy for hypertension. CRASH HYPERTENSION - KEEP IT UNDER CONTROL. APEX Pharma.",
+          "LDL Cholesterol Management - Poorly controlled LDL-C despite statin therapy. Millions of high-risk patients with hypercholesterolemia. Sanofi and Regeneron resources for lipid management.",
+        ];
+      }
 
       const results = await testingService.performCompetitiveAnalysis(
         contentToTest,
@@ -410,6 +546,35 @@ const LLMConfiguration: React.FC<Props> = ({
         ? prev.filter((c) => c.id !== content.id)
         : [...prev, content];
     });
+  };
+
+  // Custom prompts management functions
+  const addCustomPrompt = () => {
+    if (newPrompt.trim()) {
+      setCustomPrompts((prev) => [...prev, newPrompt.trim()]);
+      setNewPrompt("");
+    }
+  };
+
+  const updateCustomPrompt = (index: number, prompt: string) => {
+    setCustomPrompts((prev) =>
+      prev.map((p, i) => (i === index ? prompt.trim() : p))
+    );
+    setEditingPromptIndex(null);
+  };
+
+  const deleteCustomPrompt = (index: number) => {
+    setCustomPrompts((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const getPromptsForTesting = () => {
+    if (promptMode === "custom") {
+      return customPrompts;
+    } else if (promptMode === "both") {
+      return [...generatedPrompts, ...customPrompts];
+    } else {
+      return generatedPrompts;
+    }
   };
 
   return (
@@ -635,45 +800,186 @@ const LLMConfiguration: React.FC<Props> = ({
           )}
         </div>
 
-        {/* Prompt Generation */}
+        {/* Prompt Mode Selection */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Number of Industry Prompts to Generate
+            Choose Prompt Source
           </label>
-          <div className="flex items-center space-x-4">
-            <input
-              type="number"
-              min="3"
-              max="20"
-              value={promptCount}
-              onChange={(e) => setPromptCount(parseInt(e.target.value))}
-              className="w-20 px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
-            />
-            <button
-              onClick={generateIndustryPrompts}
-              disabled={isGeneratingPrompts || configuredProviders.length === 0}
-              className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:bg-gray-400"
-            >
-              {isGeneratingPrompts
-                ? "Generating..."
-                : `Generate ${promptCount} ${selectedIndustry} Prompts`}
-            </button>
+          <div className="flex space-x-4">
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                value="generated"
+                checked={promptMode === "generated"}
+                onChange={(e) => setPromptMode(e.target.value as any)}
+                className="text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700">
+                Generated Prompts Only
+              </span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                value="custom"
+                checked={promptMode === "custom"}
+                onChange={(e) => setPromptMode(e.target.value as any)}
+                className="text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700">Custom Prompts Only</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                value="both"
+                checked={promptMode === "both"}
+                onChange={(e) => setPromptMode(e.target.value as any)}
+                className="text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700">Both</span>
+            </label>
           </div>
         </div>
 
-        {/* Generated Prompts Preview */}
-        {generatedPrompts.length > 0 && (
+        {/* Generated Prompts Section */}
+        {(promptMode === "generated" || promptMode === "both") && (
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Generated Prompts ({generatedPrompts.length})
+              Industry Prompts Generation
             </label>
-            <div className="bg-white border rounded-md p-3 max-h-32 overflow-y-auto">
-              {generatedPrompts.map((prompt, index) => (
-                <div key={index} className="text-sm text-gray-700 mb-1">
-                  {index + 1}. {prompt}
-                </div>
-              ))}
+            <div className="flex items-center space-x-4 mb-2">
+              <input
+                type="number"
+                min="3"
+                max="20"
+                value={promptCount}
+                onChange={(e) => setPromptCount(parseInt(e.target.value))}
+                className="w-20 px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+              />
+              <button
+                onClick={generateIndustryPrompts}
+                disabled={
+                  isGeneratingPrompts || configuredProviders.length === 0
+                }
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:bg-gray-400"
+              >
+                {isGeneratingPrompts
+                  ? "Generating..."
+                  : `Generate ${promptCount} ${selectedIndustry} Prompts`}
+              </button>
             </div>
+
+            {generatedPrompts.length > 0 && (
+              <div>
+                <div className="text-xs text-gray-600 mb-2">
+                  {generatedPrompts.length} generated prompts
+                </div>
+                <div className="bg-white border rounded-md p-3 max-h-24 overflow-y-auto">
+                  {generatedPrompts.map((prompt, index) => (
+                    <div key={index} className="text-sm text-gray-700 mb-1">
+                      {index + 1}. {prompt}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Custom Prompts Section */}
+        {(promptMode === "custom" || promptMode === "both") && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Custom Prompts
+            </label>
+
+            {/* Add New Custom Prompt */}
+            <div className="flex space-x-2 mb-3">
+              <input
+                type="text"
+                value={newPrompt}
+                onChange={(e) => setNewPrompt(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && addCustomPrompt()}
+                placeholder="Enter your custom prompt..."
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+              />
+              <button
+                onClick={addCustomPrompt}
+                disabled={!newPrompt.trim()}
+                className="flex items-center space-x-1 px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Add</span>
+              </button>
+            </div>
+
+            {/* Custom Prompts List */}
+            {customPrompts.length > 0 && (
+              <div>
+                <div className="text-xs text-gray-600 mb-2">
+                  {customPrompts.length} custom prompts
+                </div>
+                <div className="bg-white border rounded-md p-3 max-h-32 overflow-y-auto">
+                  {customPrompts.map((prompt, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center space-x-2 mb-2 last:mb-0"
+                    >
+                      {editingPromptIndex === index ? (
+                        <>
+                          <input
+                            type="text"
+                            value={prompt}
+                            onChange={(e) => {
+                              const newPrompts = [...customPrompts];
+                              newPrompts[index] = e.target.value;
+                              setCustomPrompts(newPrompts);
+                            }}
+                            onKeyPress={(e) => {
+                              if (e.key === "Enter") {
+                                updateCustomPrompt(index, prompt);
+                              }
+                            }}
+                            className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm focus:ring-blue-500 focus:border-blue-500"
+                            autoFocus
+                          />
+                          <button
+                            onClick={() => updateCustomPrompt(index, prompt)}
+                            className="text-green-600 hover:text-green-800"
+                          >
+                            <Check className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => setEditingPromptIndex(null)}
+                            className="text-gray-600 hover:text-gray-800"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <span className="flex-1 text-sm text-gray-700">
+                            {index + 1}. {prompt}
+                          </span>
+                          <button
+                            onClick={() => setEditingPromptIndex(index)}
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            <Edit3 className="h-3 w-3" />
+                          </button>
+                          <button
+                            onClick={() => deleteCustomPrompt(index)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -685,7 +991,7 @@ const LLMConfiguration: React.FC<Props> = ({
               isTesting ||
               configuredProviders.length === 0 ||
               selectedContent.length === 0 ||
-              generatedPrompts.length === 0
+              getPromptsForTesting().length === 0
             }
             className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400"
           >
@@ -693,14 +999,15 @@ const LLMConfiguration: React.FC<Props> = ({
             <span>
               {isTesting
                 ? "Testing..."
-                : `Run Custom Test (${generatedPrompts.length} prompts)`}
+                : `Run Custom Test (${getPromptsForTesting().length} prompts)`}
             </span>
           </button>
         </div>
 
+        {/* Test Requirements */}
         {(configuredProviders.length === 0 ||
           selectedContent.length === 0 ||
-          generatedPrompts.length === 0) && (
+          getPromptsForTesting().length === 0) && (
           <div className="mt-3 text-sm text-amber-600 bg-amber-50 p-3 rounded-md">
             <p>To run custom test:</p>
             <ul className="list-disc list-inside mt-1 space-y-1">
@@ -710,8 +1017,44 @@ const LLMConfiguration: React.FC<Props> = ({
               {selectedContent.length === 0 && (
                 <li>Select content files to test</li>
               )}
-              {generatedPrompts.length === 0 && (
-                <li>Generate industry-specific prompts</li>
+              {getPromptsForTesting().length === 0 && (
+                <li>
+                  {promptMode === "generated" &&
+                    "Generate industry-specific prompts"}
+                  {promptMode === "custom" && "Add custom prompts"}
+                  {promptMode === "both" &&
+                    "Generate industry prompts or add custom prompts"}
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+
+        {/* Current Prompt Summary */}
+        {getPromptsForTesting().length > 0 && (
+          <div className="mt-3 text-sm text-green-600 bg-green-50 p-3 rounded-md">
+            <p className="font-medium">Ready to test with:</p>
+            <ul className="list-disc list-inside mt-1 space-y-1">
+              {promptMode === "generated" && generatedPrompts.length > 0 && (
+                <li>
+                  {generatedPrompts.length} generated {selectedIndustry} prompts
+                </li>
+              )}
+              {promptMode === "custom" && customPrompts.length > 0 && (
+                <li>{customPrompts.length} custom prompts</li>
+              )}
+              {promptMode === "both" && (
+                <>
+                  {generatedPrompts.length > 0 && (
+                    <li>
+                      {generatedPrompts.length} generated {selectedIndustry}{" "}
+                      prompts
+                    </li>
+                  )}
+                  {customPrompts.length > 0 && (
+                    <li>{customPrompts.length} custom prompts</li>
+                  )}
+                </>
               )}
             </ul>
           </div>
@@ -761,9 +1104,31 @@ const LLMConfiguration: React.FC<Props> = ({
 
         {/* Content Selection for Competitive Analysis */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Select Content for Competitive Analysis
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Select Content for Competitive Analysis
+            </label>
+            <button
+              onClick={loadMockUploadedFiles}
+              className="flex items-center space-x-1 px-2 py-1 text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded"
+            >
+              <RefreshCw className="h-3 w-3" />
+              <span>Reload Content</span>
+            </button>
+          </div>
+          {uploadedFiles.length === 0 && (
+            <div className="text-sm text-gray-500 p-4 text-center border border-gray-200 rounded-lg bg-gray-50">
+              No content loaded. Click "Reload Content" to refresh or check
+              console for details.
+            </div>
+          )}
+
+          {uploadedFiles.length > 0 && (
+            <div className="text-sm text-gray-600 mb-2">
+              {uploadedFiles.length} content files available
+            </div>
+          )}
+
           <div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto">
             {uploadedFiles.map((file) => (
               <div
@@ -831,7 +1196,7 @@ const LLMConfiguration: React.FC<Props> = ({
                 <span>
                   {selectedCompetitiveContent.length > 0
                     ? `Analyze ${selectedCompetitiveContent.length} File(s)`
-                    : "Analyze Demo Content"}
+                    : "Analyze Pharmaceutical Demo Content"}
                 </span>
               </>
             )}

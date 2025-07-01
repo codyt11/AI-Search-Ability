@@ -1,0 +1,339 @@
+{
+  "demo_images": [
+    {
+      "id": "img_001",
+      "title": "Loramin Allergy Medication Advertisement",
+      "filename": "loramin.jpg",
+      "image_url": "/demo-content/images/loramin.jpg",
+      "file_type": "JPG",
+      "format": "Print Advertisement",
+      "industry": "Pharmaceutical",
+      "content": {
+        "primary_text": "Don't let allergy ruin your day!",
+        "extracted_text": [
+          "Loramin",
+          "Loratadin",
+          "Don't let allergy ruin your day",
+          "Uspješan u otklanjanju svih simptoma alergije",
+          "Sezonski i stalni alergijski rinitis",
+          "Alergijski konjuktivitis",
+          "ZADA Pharmaceuticals"
+        ],
+        "visual_elements": [
+          "Astronaut in space suit",
+          "Cherry blossom tree with pink flowers",
+          "Blue sky background",
+          "Floating petals and allergens",
+          "Professional pharmaceutical photography",
+          "Clean modern design layout"
+        ],
+        "brand_elements": [
+          "ZADA Pharmaceuticals logo",
+          "Loramin brand name",
+          "Product information in multiple languages",
+          "Medical certification indicators",
+          "Professional pharmaceutical styling"
+        ]
+      },
+      "ai_analysis": {
+        "ocr_confidence": 98,
+        "text_extraction_quality": "Excellent",
+        "visual_composition_score": 94,
+        "brand_recognition_accuracy": 96,
+        "color_analysis": {
+          "dominant_colors": ["#2E5BBA", "#FFFFFF", "#8FBC8F", "#DEB887"],
+          "color_harmony": "Complementary blue and natural earth tones",
+          "brand_consistency": "Strong - consistent with health/wellness positioning"
+        },
+        "composition_analysis": {
+          "focal_points": [
+            "Astronaut figure",
+            "Loramin product branding",
+            "Cherry blossom imagery"
+          ],
+          "visual_hierarchy": "Excellent - clear primary and secondary elements",
+          "rule_of_thirds": "Well-applied",
+          "white_space_usage": "Balanced"
+        }
+      },
+      "ai_optimization": {
+        "readability_score": 94,
+        "semantic_relevance": 96,
+        "query_coverage": [
+          "allergy medication loratadine",
+          "seasonal allergy treatment",
+          "antihistamine for allergic rhinitis",
+          "Loramin allergy relief",
+          "best allergy medicine",
+          "allergic conjunctivitis treatment"
+        ],
+        "optimization_opportunities": [
+          "Add dosage information clarity",
+          "Include side effects disclaimer",
+          "Enhance regulatory compliance text",
+          "Add physician consultation guidance"
+        ]
+      },
+      "visual_metrics": {
+        "dimensions": "1024x768",
+        "file_size": "456KB",
+        "resolution": "300 DPI",
+        "color_depth": "24-bit",
+        "compression_quality": "High"
+      },
+      "performance_data": {
+        "estimated_engagement": 8.4,
+        "visual_appeal_score": 92,
+        "message_clarity": 88,
+        "call_to_action_prominence": 85
+      }
+    },
+    {
+      "id": "img_002",
+      "title": "ERASTAPEX TRIO Hypertension Medication Advertisement",
+      "filename": "hypertension.jpg",
+      "image_url": "/demo-content/images/hypertension.jpg",
+      "file_type": "JPG",
+      "format": "Print Advertisement",
+      "industry": "Pharmaceutical",
+      "content": {
+        "primary_text": "CRASH HYPERTENSION - KEEP IT UNDER CONTROL",
+        "extracted_text": [
+          "ERASTAPEX TRIO",
+          "Erastapex / Amlodipine / HCT",
+          "CRASH HYPERTENSION",
+          "KEEP IT UNDER CONTROL",
+          "APEX Pharma",
+          "40 mg / 5 mg / 12.5 mg",
+          "30 Film Coated Tablets"
+        ],
+        "visual_elements": [
+          "Underwater ocean scene",
+          "Human heart with pressure gauge",
+          "Tropical beach and palm trees above water",
+          "Clear blue water and bubbles",
+          "Product package prominently displayed",
+          "Professional medical illustration style"
+        ],
+        "brand_elements": [
+          "APEX Pharma logo and branding",
+          "ERASTAPEX TRIO product name",
+          "Medical product packaging design",
+          "Professional pharmaceutical color scheme",
+          "Clinical presentation style"
+        ]
+      },
+      "ai_analysis": {
+        "ocr_confidence": 95,
+        "text_extraction_quality": "Excellent - clear pharmaceutical text",
+        "visual_composition_score": 87,
+        "brand_recognition_accuracy": 78,
+        "color_analysis": {
+          "dominant_colors": ["#1E90FF", "#87CEEB", "#FF6347", "#FFFFFF"],
+          "color_harmony": "Ocean blue with coral accent tones",
+          "brand_consistency": "Strong - pharmaceutical brand alignment"
+        },
+        "composition_analysis": {
+          "focal_points": [
+            "Heart with pressure gauge",
+            "ERASTAPEX TRIO branding",
+            "Ocean underwater scene"
+          ],
+          "visual_hierarchy": "Strong - medical urgency effectively communicated",
+          "rule_of_thirds": "Applied",
+          "white_space_usage": "Well-balanced"
+        }
+      },
+      "ai_optimization": {
+        "readability_score": 92,
+        "semantic_relevance": 95,
+        "query_coverage": [
+          "hypertension medication erastapex",
+          "blood pressure control medication",
+          "amlodipine combination therapy",
+          "cardiovascular health treatment",
+          "high blood pressure management",
+          "ACE inhibitor combination drugs"
+        ],
+        "optimization_opportunities": [
+          "Add contraindications information",
+          "Include blood pressure target ranges",
+          "Enhance patient education content",
+          "Add lifestyle modification guidance"
+        ]
+      },
+      "visual_metrics": {
+        "dimensions": "1920x1280",
+        "file_size": "892KB",
+        "resolution": "72 DPI",
+        "color_depth": "24-bit",
+        "compression_quality": "High"
+      },
+      "performance_data": {
+        "estimated_engagement": 8.9,
+        "visual_appeal_score": 93,
+        "message_clarity": 95,
+        "call_to_action_prominence": 88
+      }
+    },
+    {
+      "id": "img_003",
+      "title": "LDL Cholesterol Management Advertisement",
+      "filename": "LDL-C-Ad.jpg",
+      "image_url": "/demo-content/images/LDL-C-Ad.jpg",
+      "file_type": "JPG",
+      "format": "Print Advertisement",
+      "industry": "Pharmaceutical",
+      "content": {
+        "primary_text": "Poorly controlled LDL-C continues to loom over millions of lives",
+        "extracted_text": [
+          "Poorly controlled LDL-C continues to loom over millions of lives",
+          "Despite treatment with statins, millions of high-risk patients with hypercholesterolemia in the US continue to have poorly controlled LDL-C",
+          "Sanofi and Regeneron are committed to providing resources",
+          "SANOFI",
+          "REGENERON",
+          "Going beyond today"
+        ],
+        "visual_elements": [
+          "Professional businessman in suit",
+          "Large spherical globe representation",
+          "Urban concrete steps background",
+          "Professional corporate photography",
+          "Dramatic lighting and composition",
+          "Global health crisis visualization"
+        ],
+        "brand_elements": [
+          "Sanofi company logo and branding",
+          "Regeneron partnership branding",
+          "Corporate pharmaceutical styling",
+          "Professional medical communication",
+          "Healthcare industry presentation"
+        ]
+      },
+      "ai_analysis": {
+        "ocr_confidence": 89,
+        "text_extraction_quality": "Good - clear certification text",
+        "visual_composition_score": 91,
+        "brand_recognition_accuracy": 83,
+        "color_analysis": {
+          "dominant_colors": ["#2F4F4F", "#708090", "#B8860B", "#F5F5DC"],
+          "color_harmony": "Corporate grey tones with healthcare accents",
+          "brand_consistency": "Excellent - professional pharmaceutical presentation"
+        },
+        "composition_analysis": {
+          "focal_points": [
+            "Businessman figure",
+            "Global sphere visualization",
+            "Corporate messaging"
+          ],
+          "visual_hierarchy": "Strong - serious health impact effectively communicated",
+          "rule_of_thirds": "Well-applied",
+          "white_space_usage": "Excellent"
+        }
+      },
+      "ai_optimization": {
+        "readability_score": 89,
+        "semantic_relevance": 97,
+        "query_coverage": [
+          "LDL cholesterol management",
+          "hypercholesterolemia treatment",
+          "cholesterol lowering medications",
+          "cardiovascular risk reduction",
+          "statin therapy limitations",
+          "lipid management guidelines"
+        ],
+        "optimization_opportunities": [
+          "Add clinical trial data references",
+          "Include patient risk assessment tools",
+          "Enhance physician education resources",
+          "Add treatment algorithm guidance"
+        ]
+      },
+      "visual_metrics": {
+        "dimensions": "1080x1080",
+        "file_size": "234KB",
+        "resolution": "72 DPI",
+        "color_depth": "24-bit",
+        "compression_quality": "Medium-High"
+      },
+      "performance_data": {
+        "estimated_engagement": 9.2,
+        "visual_appeal_score": 94,
+        "message_clarity": 90,
+        "call_to_action_prominence": 78
+      }
+    }
+  ],
+  "image_categories": [
+    "Pharmaceutical Advertising",
+    "Medical Communications",
+    "Healthcare Marketing",
+    "Prescription Drug Promotion",
+    "Clinical Messaging"
+  ],
+  "analysis_capabilities": [
+    {
+      "feature": "OCR Text Extraction",
+      "description": "Extract and analyze text content within images",
+      "accuracy_range": "85-98%"
+    },
+    {
+      "feature": "Visual Composition Analysis",
+      "description": "Evaluate design principles, focal points, and visual hierarchy",
+      "scoring_range": "0-100"
+    },
+    {
+      "feature": "Brand Recognition",
+      "description": "Identify brand elements, logos, and consistent visual identity",
+      "confidence_range": "70-96%"
+    },
+    {
+      "feature": "Color Palette Analysis",
+      "description": "Analyze color harmony, brand consistency, and emotional impact",
+      "detail_level": "Comprehensive"
+    },
+    {
+      "feature": "AI Query Optimization",
+      "description": "Optimize images for AI search and discovery",
+      "improvement_areas": "Multiple recommendations"
+    }
+  ],
+  "demo_scenarios": [
+    {
+      "name": "Pharmaceutical Advertising",
+      "description": "Analyze prescription drug advertisements for compliance and effectiveness",
+      "key_metrics": [
+        "regulatory compliance",
+        "medical accuracy",
+        "patient education"
+      ]
+    },
+    {
+      "name": "Medical Device Marketing",
+      "description": "Optimize medical device promotional materials for healthcare professionals",
+      "key_metrics": [
+        "clinical evidence presentation",
+        "safety information clarity",
+        "professional targeting"
+      ]
+    },
+    {
+      "name": "Patient Education Materials",
+      "description": "Enhance patient-facing content for better health outcomes",
+      "key_metrics": [
+        "health literacy optimization",
+        "medication adherence support",
+        "safety messaging"
+      ]
+    },
+    {
+      "name": "Healthcare Brand Assets",
+      "description": "Ensure pharmaceutical brand consistency across all materials",
+      "key_metrics": [
+        "brand compliance",
+        "medical accuracy",
+        "regulatory adherence"
+      ]
+    }
+  ]
+}

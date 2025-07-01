@@ -1,0 +1,228 @@
+{
+  "advertisements": [
+    {
+      "id": "ad_001",
+      "title": "Revolutionary AI-Powered Project Management Tool",
+      "platform": "LinkedIn",
+      "industry": "Technology",
+      "format": "Single Image Ad",
+      "content": {
+        "headline": "Boost Team Productivity by 40% with AI-Driven Task Management",
+        "description": "Discover how our intelligent project management platform uses machine learning to predict bottlenecks, optimize workflows, and deliver projects 25% faster. Perfect for remote teams, startups, and enterprises.",
+        "cta": "Start Free Trial",
+        "body_text": "Transform your team's productivity with intelligent automation. Our AI analyzes your project patterns, suggests optimal task assignments, and prevents delays before they happen. Join 50,000+ teams already saving 10 hours per week.",
+        "keywords": [
+          "AI project management",
+          "team productivity",
+          "workflow automation",
+          "remote team tools",
+          "project tracking"
+        ],
+        "target_audience": "Project managers, team leads, startup founders, remote teams",
+        "pain_points": [
+          "missed deadlines",
+          "poor task allocation",
+          "workflow bottlenecks",
+          "team coordination"
+        ],
+        "benefits": [
+          "40% productivity increase",
+          "25% faster delivery",
+          "automated task management",
+          "predictive analytics"
+        ]
+      },
+      "visual": {
+        "image_url": "/demo-content/images/project-management-dashboard.jpg",
+        "alt_text": "Modern project management dashboard showing AI-powered task automation, team performance metrics, and workflow optimization features",
+        "image_description": "Clean, modern interface displaying project timelines, team member avatars, progress bars, and AI-suggested optimizations with blue and white color scheme",
+        "dimensions": "1200x628",
+        "file_size": "245KB"
+      },
+      "ai_optimization": {
+        "readability_score": 92,
+        "keyword_density": 2.8,
+        "semantic_relevance": 94,
+        "query_coverage": [
+          "What is the best AI project management tool?",
+          "How to improve team productivity with AI?",
+          "AI-powered workflow automation software",
+          "Project management tools for remote teams"
+        ],
+        "optimization_opportunities": [
+          "Add specific industry use cases",
+          "Include customer testimonials",
+          "Enhance mobile-first language",
+          "Add comparison with competitors"
+        ]
+      },
+      "performance_metrics": {
+        "click_through_rate": 3.2,
+        "conversion_rate": 12.5,
+        "engagement_rate": 8.7,
+        "ai_mention_frequency": 15
+      }
+    },
+    {
+      "id": "ad_002",
+      "title": "Premium Skincare That Actually Works",
+      "platform": "Instagram",
+      "industry": "Beauty & Wellness",
+      "format": "Carousel Ad",
+      "content": {
+        "headline": "Clinically Proven Results in 14 Days",
+        "description": "Transform your skin with our dermatologist-formulated serum. 96% of users see visible improvements in just 2 weeks. Natural ingredients, science-backed results.",
+        "cta": "Shop Now - 30% Off",
+        "body_text": "Finally, a skincare routine that delivers real results. Our advanced vitamin C serum combines powerful antioxidants with gentle, skin-loving ingredients. Perfect for all skin types, cruelty-free, and dermatologist tested.",
+        "keywords": [
+          "vitamin C serum",
+          "anti-aging skincare",
+          "dermatologist recommended",
+          "natural skincare",
+          "clinically proven"
+        ],
+        "target_audience": "Women 25-45, skincare enthusiasts, natural beauty seekers",
+        "pain_points": [
+          "aging skin",
+          "dull complexion",
+          "uneven skin tone",
+          "ineffective products"
+        ],
+        "benefits": [
+          "visible results in 14 days",
+          "96% customer satisfaction",
+          "natural ingredients",
+          "dermatologist tested"
+        ]
+      },
+      "visual": {
+        "image_url": "/demo-content/images/skincare-serum-results.jpg",
+        "alt_text": "Before and after comparison showing dramatic skin improvement using vitamin C serum, with glowing, even-toned skin results",
+        "image_description": "Split-screen before/after image showing clear skin transformation, elegant product bottle placement, soft natural lighting with peachy pink tones",
+        "dimensions": "1080x1080",
+        "file_size": "189KB"
+      },
+      "ai_optimization": {
+        "readability_score": 89,
+        "keyword_density": 3.1,
+        "semantic_relevance": 91,
+        "query_coverage": [
+          "Best vitamin C serum for anti-aging",
+          "Dermatologist recommended skincare routine",
+          "Natural skincare products that work",
+          "How to improve skin texture quickly"
+        ],
+        "optimization_opportunities": [
+          "Include ingredient list details",
+          "Add user-generated content",
+          "Mention specific skin concerns",
+          "Include price comparison value"
+        ]
+      },
+      "performance_metrics": {
+        "click_through_rate": 4.1,
+        "conversion_rate": 18.3,
+        "engagement_rate": 12.4,
+        "ai_mention_frequency": 8
+      }
+    },
+    {
+      "id": "ad_003",
+      "title": "Smart Home Security That Thinks Ahead",
+      "platform": "Facebook",
+      "industry": "Home Security",
+      "format": "Video Ad",
+      "content": {
+        "headline": "AI-Powered Security That Prevents Break-ins Before They Happen",
+        "description": "Our intelligent security system learns your family's patterns and detects unusual activity instantly. 24/7 monitoring, instant alerts, and police dispatch in emergencies.",
+        "cta": "Get Free Quote",
+        "body_text": "Protect what matters most with cutting-edge AI technology. Our smart cameras recognize faces, detect suspicious behavior, and alert you instantly. Easy DIY installation, professional monitoring, and mobile app control included.",
+        "keywords": [
+          "smart home security",
+          "AI camera system",
+          "home monitoring",
+          "burglar alarm",
+          "security cameras"
+        ],
+        "target_audience": "Homeowners 30-55, families with children, tech-savvy consumers",
+        "pain_points": [
+          "home break-ins",
+          "package theft",
+          "family safety concerns",
+          "expensive security systems"
+        ],
+        "benefits": [
+          "AI threat detection",
+          "instant mobile alerts",
+          "professional monitoring",
+          "easy installation"
+        ]
+      },
+      "visual": {
+        "image_url": "/demo-content/images/smart-security-system.jpg",
+        "alt_text": "Modern smart home security dashboard showing AI-powered cameras, motion detection alerts, and mobile app interface for home monitoring",
+        "image_description": "Sleek security camera monitoring multiple home areas, smartphone app interface, night vision capabilities, modern home exterior with professional lighting",
+        "dimensions": "1920x1080",
+        "file_size": "312KB"
+      },
+      "ai_optimization": {
+        "readability_score": 87,
+        "keyword_density": 2.9,
+        "semantic_relevance": 93,
+        "query_coverage": [
+          "Best AI home security systems 2024",
+          "Smart cameras with facial recognition",
+          "Home security systems with mobile alerts",
+          "DIY security system installation"
+        ],
+        "optimization_opportunities": [
+          "Add local installation services",
+          "Include cost comparison data",
+          "Highlight smart home integration",
+          "Feature customer success stories"
+        ]
+      },
+      "performance_metrics": {
+        "click_through_rate": 2.8,
+        "conversion_rate": 14.7,
+        "engagement_rate": 6.9,
+        "ai_mention_frequency": 22
+      }
+    }
+  ],
+  "content_categories": [
+    "Social Media Advertising",
+    "AI-Optimized Content",
+    "Performance Marketing",
+    "Visual Storytelling"
+  ],
+  "demo_scenarios": [
+    {
+      "name": "B2B Technology Marketing",
+      "description": "Showcase how AI readiness analysis improves tech product advertising",
+      "key_metrics": [
+        "keyword optimization",
+        "query coverage",
+        "technical accuracy"
+      ]
+    },
+    {
+      "name": "Consumer Brand Advertising",
+      "description": "Demonstrate optimization for lifestyle and consumer products",
+      "key_metrics": [
+        "emotional appeal",
+        "benefit clarity",
+        "visual-text alignment"
+      ]
+    },
+    {
+      "name": "High-Intent Purchase Content",
+      "description": "Analysis of content targeting ready-to-buy customers",
+      "key_metrics": [
+        "conversion optimization",
+        "trust signals",
+        "urgency factors"
+      ]
+    }
+  ]
+}
