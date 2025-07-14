@@ -1,11 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import {
   Brain,
-  FileText,
   BarChart3,
   Settings,
-  Filter,
-  ChevronDown,
   X,
   TrendingUp,
   AlertTriangle,
