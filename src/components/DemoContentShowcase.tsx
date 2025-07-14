@@ -18,6 +18,9 @@ import {
   Info,
   X,
   Brain,
+  Clock,
+  Calendar,
+  FileQuestion,
 } from "lucide-react";
 import demoContentService, {
   DemoAdvertisement,
@@ -100,43 +103,42 @@ const DemoContentShowcase: React.FC<Props> = ({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
         <div>
-          <h2 className="text-2xl font-bold text-white">
+          <h2 className="text-xl sm:text-2xl font-bold text-white">
             Demo Content Showcase
           </h2>
           <p className="text-gray-400">
-            Explore sample advertisements and landing pages with AI optimization
-            analysis
+            Explore sample advertisements and landing pages with AI optimization analysis
           </p>
         </div>
-        <div className="flex items-center space-x-2 bg-gray-800 rounded-lg p-1">
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
           <button
             onClick={() => setSelectedTab("all")}
-            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               selectedTab === "all"
                 ? "bg-blue-600 text-white"
-                : "text-gray-400 hover:text-white"
+                : "bg-gray-800 text-gray-300 hover:bg-gray-700"
             }`}
           >
             All Content
           </button>
           <button
             onClick={() => setSelectedTab("ads")}
-            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               selectedTab === "ads"
                 ? "bg-blue-600 text-white"
-                : "text-gray-400 hover:text-white"
+                : "bg-gray-800 text-gray-300 hover:bg-gray-700"
             }`}
           >
             Advertisements
           </button>
           <button
             onClick={() => setSelectedTab("pages")}
-            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               selectedTab === "pages"
                 ? "bg-blue-600 text-white"
-                : "text-gray-400 hover:text-white"
+                : "bg-gray-800 text-gray-300 hover:bg-gray-700"
             }`}
           >
             Landing Pages
@@ -145,28 +147,28 @@ const DemoContentShowcase: React.FC<Props> = ({
       </div>
 
       {/* Content Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {filteredContent.map((content) => (
           <div
             key={content.id}
-            className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:bg-gray-800 transition-all duration-200 cursor-pointer group"
+            className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 sm:p-6 hover:bg-gray-800 transition-all duration-200 cursor-pointer group"
             onClick={() => handleContentClick(content)}
           >
             {/* Content Header */}
             <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2 mb-2">
                   {"platform" in content && getPlatformIcon(content.platform)}
-                  <span className="text-xs text-gray-400 uppercase tracking-wide">
+                  <span className="text-xs text-gray-400 uppercase tracking-wide truncate">
                     {"platform" in content ? content.platform : "Landing Page"}
                   </span>
                 </div>
-                <h3 className="font-semibold text-white group-hover:text-blue-400 transition-colors">
+                <h3 className="font-semibold text-white group-hover:text-blue-400 transition-colors truncate">
                   {content.title}
                 </h3>
-                <p className="text-sm text-gray-400 mt-1">{content.industry}</p>
+                <p className="text-sm text-gray-400 mt-1 truncate">{content.industry}</p>
               </div>
-              <div className="text-right">
+              <div className="text-right ml-4">
                 <div
                   className={`text-lg font-bold ${getScoreColor(
                     getOptimizationScore(content)
@@ -179,78 +181,24 @@ const DemoContentShowcase: React.FC<Props> = ({
             </div>
 
             {/* Content Preview */}
-            <div className="space-y-3">
-              <div>
-                <h4 className="font-medium text-white text-sm line-clamp-2">
-                  {"platform" in content
-                    ? content.content.headline
-                    : content.content.main_headline}
-                </h4>
-                <p className="text-xs text-gray-400 mt-1 line-clamp-2">
-                  {"platform" in content
-                    ? content.content.description
-                    : content.content.subheadline}
-                </p>
-              </div>
+            <div className="text-sm text-gray-400 line-clamp-3">
+              {content.description || "No description available"}
+            </div>
 
-              {/* Visual Indicator */}
-              <div className="flex items-center space-x-2 text-xs text-gray-500">
-                <Image className="h-3 w-3" />
-                <span>
-                  {"visual" in content
-                    ? content.visual.dimensions
-                    : "Visual Content"}
-                </span>
-                <span>•</span>
-                <span>
-                  {"format" in content ? content.format : content.content_type}
-                </span>
-              </div>
-
-              {/* Key Metrics */}
-              <div className="grid grid-cols-2 gap-2 pt-2">
-                {"performance_metrics" in content && (
-                  <>
-                    <div className="bg-gray-700/30 rounded p-2">
-                      <div className="text-xs text-gray-400">CTR</div>
-                      <div className="text-sm font-medium text-white">
-                        {content.performance_metrics.click_through_rate}%
-                      </div>
-                    </div>
-                    <div className="bg-gray-700/30 rounded p-2">
-                      <div className="text-xs text-gray-400">Conv</div>
-                      <div className="text-sm font-medium text-white">
-                        {content.performance_metrics.conversion_rate}%
-                      </div>
-                    </div>
-                  </>
-                )}
-                {"ai_readiness_analysis" in content && (
-                  <>
-                    <div className="bg-gray-700/30 rounded p-2">
-                      <div className="text-xs text-gray-400">Structure</div>
-                      <div className="text-sm font-medium text-white">
-                        {content.ai_readiness_analysis.structure_score}%
-                      </div>
-                    </div>
-                    <div className="bg-gray-700/30 rounded p-2">
-                      <div className="text-xs text-gray-400">Keywords</div>
-                      <div className="text-sm font-medium text-white">
-                        {content.ai_readiness_analysis.keyword_optimization}%
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Action Indicator */}
-              <div className="flex items-center justify-between pt-3 border-t border-gray-700/50">
-                <div className="flex items-center space-x-1 text-xs text-blue-400">
-                  <Eye className="h-3 w-3" />
-                  <span>View Analysis</span>
-                </div>
-                <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-blue-400 transition-colors" />
-              </div>
+            {/* Content Stats */}
+            <div className="flex flex-wrap items-center gap-2 mt-4 text-xs text-gray-500">
+              <span className="flex items-center space-x-1">
+                <FileText className="h-3 w-3" />
+                <span>{content.wordCount} words</span>
+              </span>
+              <span className="flex items-center space-x-1">
+                <Clock className="h-3 w-3" />
+                <span>{content.readTime} min read</span>
+              </span>
+              <span className="flex items-center space-x-1">
+                <Calendar className="h-3 w-3" />
+                <span>{new Date(content.lastUpdated).toLocaleDateString()}</span>
+              </span>
             </div>
           </div>
         ))}
@@ -980,12 +928,10 @@ const DemoContentShowcase: React.FC<Props> = ({
       {/* Empty State */}
       {filteredContent.length === 0 && (
         <div className="text-center py-12">
-          <FileText className="h-16 w-16 mx-auto text-gray-600 mb-4" />
-          <h3 className="text-lg font-medium text-white mb-2">
-            No Content Available
-          </h3>
+          <FileQuestion className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-300 mb-2">No content found</h3>
           <p className="text-gray-400">
-            Demo content is loading or not available. Please try again.
+            Try selecting a different content type or check back later
           </p>
         </div>
       )}

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { Upload, Loader2 } from "lucide-react";
+import { Upload, File } from "lucide-react";
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
@@ -40,7 +40,7 @@ const FileUpload = ({
     <div
       {...getRootProps()}
       className={`
-        border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
+        border-2 border-dashed rounded-lg p-4 sm:p-8 text-center cursor-pointer transition-all duration-200
         ${
           isDragActive
             ? "border-blue-500 bg-blue-900/20 scale-[1.02]"
@@ -54,37 +54,38 @@ const FileUpload = ({
       `}
     >
       <input {...getInputProps()} />
-
-      <div className="flex flex-col items-center space-y-4">
-        {isAnalyzing ? (
-          <div className="p-3 rounded-full bg-blue-600/20">
-            <Loader2 className="h-8 w-8 text-blue-400 animate-spin" />
-          </div>
-        ) : (
-          <div className="p-3 rounded-full bg-gray-700/50">
-            <Upload className="h-8 w-8 text-gray-400" />
-          </div>
-        )}
-
+      <div className="flex flex-col items-center space-y-3">
+        <div className="p-3 bg-gray-700/50 rounded-full">
+          <Upload className="h-6 w-6 text-gray-400" />
+        </div>
         <div>
-          <p className="text-lg font-medium text-white">
-            {isAnalyzing
-              ? "Analyzing your asset..."
-              : isDragActive
-              ? "Drop your file here"
-              : "Upload your digital asset"}
+          <p className="text-base sm:text-lg font-medium text-white mb-1">
+            {isDragActive ? "Drop your file here" : "Upload your content"}
           </p>
-          <p className="text-sm text-gray-400 mt-1">
-            {isAnalyzing
-              ? "This may take a few moments"
-              : "Drag and drop a file or click to browse"}
+          <p className="text-sm text-gray-400">
+            Drag & drop or click to select a file
           </p>
         </div>
-
-        {!isAnalyzing && (
-          <div className="text-xs text-gray-500 bg-gray-700/30 px-3 py-1 rounded-full">
-            Supported formats: PDF, HTML, DOCX, TXT (Max 50MB)
+        <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center space-x-1">
+            <File className="h-3 w-3" />
+            <span>PDF</span>
           </div>
+          <div className="flex items-center space-x-1">
+            <File className="h-3 w-3" />
+            <span>HTML</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <File className="h-3 w-3" />
+            <span>DOCX</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <File className="h-3 w-3" />
+            <span>TXT</span>
+          </div>
+        </div>
+        {isAnalyzing && (
+          <p className="text-sm text-blue-400">Analyzing your content...</p>
         )}
       </div>
     </div>

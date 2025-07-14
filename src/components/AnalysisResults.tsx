@@ -52,22 +52,18 @@ const AnalysisResults = ({ result }: AnalysisResultsProps) => {
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Overall Score */}
-      <div className="card p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-white">Analysis Results</h2>
+      <div className="card p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 space-y-4 sm:space-y-0">
+          <h2 className="text-xl sm:text-2xl font-bold text-white">Analysis Results</h2>
           <div className="text-right">
             <p className="text-sm text-gray-400">Overall AI Compatibility</p>
-            <p
-              className={`text-3xl font-bold ${scoreColor(
-                result.overallScore
-              )}`}
-            >
+            <p className={`text-2xl sm:text-3xl font-bold ${scoreColor(result.overallScore)}`}>
               {result.overallScore}%
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <div className="p-2 rounded-lg bg-blue-600/20">
@@ -78,15 +74,11 @@ const AnalysisResults = ({ result }: AnalysisResultsProps) => {
             <div className="space-y-2 text-sm bg-gray-700/30 p-4 rounded-lg">
               <div className="flex justify-between">
                 <span className="text-gray-400">Type:</span>
-                <span className="font-medium text-white">
-                  {result.fileType}
-                </span>
+                <span className="font-medium text-white">{result.fileType}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Size:</span>
-                <span className="font-medium text-white">
-                  {result.fileSize}
-                </span>
+                <span className="font-medium text-white">{result.fileSize}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Total Tokens:</span>
@@ -97,127 +89,73 @@ const AnalysisResults = ({ result }: AnalysisResultsProps) => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="p-2 rounded-lg bg-purple-600/20">
-                <Brain className="h-5 w-5 text-purple-400" />
+          {/* Score Breakdown and Token Distribution */}
+          <div className="col-span-1 sm:col-span-2 lg:col-span-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              <div className="card p-4 sm:p-6">
+                <h3 className="text-lg font-bold text-white mb-4">Score Breakdown</h3>
+                <div className="h-[250px] sm:h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={scoreData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                      <XAxis
+                        dataKey="name"
+                        angle={-45}
+                        textAnchor="end"
+                        height={80}
+                        stroke="#9CA3AF"
+                        fontSize={11}
+                        interval={0}
+                        tick={{ fontSize: 10 }}
+                      />
+                      <YAxis domain={[0, 100]} stroke="#9CA3AF" fontSize={12} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#1f2937",
+                          border: "1px solid #374151",
+                          borderRadius: "8px",
+                          color: "#f9fafb",
+                        }}
+                      />
+                      <Bar dataKey="score" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
-              <span className="font-medium text-white">Readability</span>
-            </div>
-            <div className="space-y-2 text-sm bg-gray-700/30 p-4 rounded-lg">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Reading Level:</span>
-                <span className="font-medium text-white">
-                  {result.readabilityLevel}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Avg. Sentence Length:</span>
-                <span className="font-medium text-white">
-                  {result.avgSentenceLength} words
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Complex Words:</span>
-                <span className="font-medium text-white">
-                  {result.complexWordsPercent}%
-                </span>
+
+              <div className="card p-4 sm:p-6">
+                <h3 className="text-lg font-bold text-white mb-4">Token Distribution</h3>
+                <div className="h-[250px] sm:h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={tokenDistribution}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        outerRadius="80%"
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {tokenDistribution.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#1f2937",
+                          border: "1px solid #374151",
+                          borderRadius: "8px",
+                          color: "#f9fafb",
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             </div>
           </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="p-2 rounded-lg bg-green-600/20">
-                <Target className="h-5 w-5 text-green-400" />
-              </div>
-              <span className="font-medium text-white">Optimization</span>
-            </div>
-            <div className="space-y-2 text-sm bg-gray-700/30 p-4 rounded-lg">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Issues Found:</span>
-                <span className="font-medium text-white">
-                  {result.issues.length}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Recommendations:</span>
-                <span className="font-medium text-white">
-                  {result.recommendations.length}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Potential Improvement:</span>
-                <span className="font-medium text-green-400">
-                  +{result.potentialImprovement}%
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Score Breakdown */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="card p-6">
-          <h3 className="text-lg font-bold text-white mb-4">Score Breakdown</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={scoreData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis
-                dataKey="name"
-                angle={-45}
-                textAnchor="end"
-                height={100}
-                stroke="#9CA3AF"
-                fontSize={11}
-              />
-              <YAxis domain={[0, 100]} stroke="#9CA3AF" fontSize={12} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#1f2937",
-                  border: "1px solid #374151",
-                  borderRadius: "8px",
-                  color: "#f9fafb",
-                }}
-              />
-              <Bar dataKey="score" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="card p-6">
-          <h3 className="text-lg font-bold text-white mb-4">
-            Token Distribution
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={tokenDistribution}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) =>
-                  `${name} ${(percent * 100).toFixed(0)}%`
-                }
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {tokenDistribution.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#1f2937",
-                  border: "1px solid #374151",
-                  borderRadius: "8px",
-                  color: "#f9fafb",
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
         </div>
       </div>
 

@@ -11,6 +11,8 @@ import {
   Info,
   ChevronLeft,
   ChevronRight,
+  Brain,
+  Download,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -236,13 +238,45 @@ const ContentGapInsights: React.FC<ContentGapInsightsProps> = ({
     return "text-red-400";
   };
 
+  const handleExportGaps = () => {
+    const csvContent = [
+      ["ID", "Title", "Description", "Impact", "Urgency", "Failed Prompts", "Failure Rate", "Time to Fix", "Compliance Risk", "Primary Audience", "Actionable", "Improvement Percentage"],
+      ...currentGaps.map(gap => [
+        gap.id,
+        gap.title,
+        gap.description,
+        gap.impact,
+        gap.urgency,
+        gap.failedPrompts.toLocaleString(),
+        `${(gap.failureRate * 100).toFixed(0)}%`,
+        `${gap.timeToFixWeeks}w`,
+        gap.complianceRisk ? "Yes" : "No",
+        gap.primaryAudience,
+        gap.actionable ? "Yes" : "No",
+        `${gap.improvementPercentage.toFixed(0)}%`
+      ])
+    ];
+    const csvString = csvContent.map(row => row.join(",")).join("\n");
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${industryData?.name || "content_gaps"}_insights.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const keyMessage = `Content gaps are impacting user experience. ${totalFailedPrompts.toLocaleString()} failed prompts monthly are preventing users from getting the information they need. Fixing these gaps will significantly improve satisfaction and platform effectiveness.`;
+
   return (
     <div className="space-y-6">
       {/* Header with Action Summary */}
-      <div className="card p-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="card p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 space-y-4 sm:space-y-0">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
               {industryData?.name || "Business"} Impact Analysis
             </h2>
             <p className="text-gray-400">
@@ -250,7 +284,7 @@ const ContentGapInsights: React.FC<ContentGapInsightsProps> = ({
               {industryData?.name?.toLowerCase() || "your business"}
             </p>
           </div>
-          <div className="bg-blue-600/20 border border-blue-500/30 p-4 rounded-lg">
+          <div className="bg-blue-600/20 border border-blue-500/30 p-4 rounded-lg w-full sm:w-auto">
             <div className="text-center">
               <p className="text-2xl font-bold text-blue-300">
                 {totalFailedPrompts.toLocaleString()}
@@ -261,43 +295,25 @@ const ContentGapInsights: React.FC<ContentGapInsightsProps> = ({
         </div>
 
         {/* Key Message */}
-        <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-500/30 rounded-lg p-6">
-          <div className="flex items-start space-x-4">
-            <div className="p-2 bg-blue-600/20 rounded-lg">
-              <Info className="h-6 w-6 text-blue-400" />
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <div className="p-3 bg-blue-900/30 rounded-lg">
+              <Brain className="h-6 w-6 text-blue-400" />
             </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-white mb-2">
-                Content gaps are impacting user experience
-              </h3>
-              <p className="text-blue-200 text-sm mb-4">
-                {totalFailedPrompts.toLocaleString()} failed prompts monthly are
-                preventing users from getting the information they need. Fixing
-                these gaps will significantly improve satisfaction and platform
-                effectiveness.
+            <div>
+              <h3 className="text-lg font-semibold text-white">Key Insight</h3>
+              <p className="text-gray-400 mt-1">
+                {keyMessage || "No key insights available"}
               </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-blue-900/50 text-blue-300 rounded-full text-xs">
-                  User Experience Priority
-                </span>
-                <span className="px-3 py-1 bg-purple-900/50 text-purple-300 rounded-full text-xs">
-                  Platform Reliability
-                </span>
-                <span className="px-3 py-1 bg-green-900/50 text-green-300 rounded-full text-xs">
-                  Content Quality
-                </span>
-              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Performance Metrics */}
-      <div className="card p-6">
-        <h3 className="text-lg font-bold text-white mb-4">
-          Performance Overview
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Performance Overview */}
+      <div className="card p-4 sm:p-6">
+        <h3 className="text-lg font-bold text-white mb-4">Performance Overview</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {performanceMetrics.map((metric, index) => (
             <div
               key={index}
@@ -309,7 +325,7 @@ const ContentGapInsights: React.FC<ContentGapInsightsProps> = ({
               </div>
               <div className="flex items-baseline space-x-2 mb-1">
                 <span
-                  className={`text-2xl font-bold ${getPerformanceColor(
+                  className={`text-xl sm:text-2xl font-bold ${getPerformanceColor(
                     metric.current,
                     metric.target,
                     metric.trend
@@ -339,35 +355,24 @@ const ContentGapInsights: React.FC<ContentGapInsightsProps> = ({
       </div>
 
       {/* Top Priority Gaps */}
-      <div className="card p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-bold text-white">Top Priority Gaps</h3>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-400">
-              Showing {startIndex + 1}-
-              {Math.min(endIndex, prioritizedGaps.length)} of{" "}
-              {prioritizedGaps.length} gaps
-            </span>
-            <div className="flex space-x-2">
-              <button
-                onClick={goToPrevPage}
-                disabled={currentPage === 0}
-                className="p-2 rounded-lg bg-gray-800 border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
-              >
-                <ChevronLeft className="h-4 w-4 text-gray-400" />
-              </button>
-              <button
-                onClick={goToNextPage}
-                disabled={currentPage === totalPages - 1}
-                className="p-2 rounded-lg bg-gray-800 border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
-              >
-                <ChevronRight className="h-4 w-4 text-gray-400" />
-              </button>
-            </div>
+      <div className="card p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 space-y-4 sm:space-y-0">
+          <div>
+            <h3 className="text-lg font-bold text-white">Top Priority Gaps</h3>
+            <p className="text-sm text-gray-400">
+              Focus on these content gaps for maximum impact
+            </p>
           </div>
+          <button
+            onClick={handleExportGaps}
+            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 w-full sm:w-auto justify-center sm:justify-start"
+          >
+            <Download className="h-4 w-4" />
+            <span>Export Gaps</span>
+          </button>
         </div>
 
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {currentGaps.map((gap, index) => (
             <div
               key={gap.id}
